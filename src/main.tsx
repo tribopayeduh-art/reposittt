@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles.css";
+import "./vamobet.css";
 import { initAffiliateTracking } from "./lib/affiliateTracking";
 import { initMetaAdsAttribution } from "./lib/metaTracking";
 
@@ -75,7 +76,7 @@ bootstrap().catch((error) => {
   console.error("[bootstrap]", error);
   root.render(
     <div className="bootstrap-error">
-      <strong>Não foi possível iniciar a Nacional Bet.</strong>
+      <strong>Não foi possível iniciar a Vamobet.</strong>
       <span>Atualize a página. Se o problema continuar, verifique a conexão.</span>
       <button onClick={() => location.reload()}>Tentar novamente</button>
     </div>

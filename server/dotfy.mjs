@@ -131,7 +131,7 @@ export async function createDotfyPixCharge({
   baseUrl = 'https://app.dotfy.com.br',
   value,
   correlationID = '',
-  description = 'Deposito Nacional Bet PIX',
+  description = 'Deposito Vamobet PIX',
   expiresIn = 3600,
   customer = {},
   webhookUrl = '',
@@ -150,15 +150,15 @@ export async function createDotfyPixCharge({
   const formattedPhone = formatDotfyPhone(customer.phone);
   const formattedTaxID = formatDotfyTaxId(customer.taxID || customer.cpf || customer.document);
   const cleanEmail = String(customer.email || 'pagamentos@borah.bet').trim().toLowerCase();
-  const cleanName = String(customer.name || 'Jogador Nacional Bet').trim().slice(0, 100);
+  const cleanName = String(customer.name || 'Jogador Vamobet').trim().slice(0, 100);
 
   // Monta o payload 100% fiel à documentação oficial da Dotfy com identificadores de correlação
   const payload = {
     value: Number(Number(value).toFixed(2)), // Valor em REAIS (ex: 29.90)
-    description: String(description || 'Deposito Nacional Bet').slice(0, 255),
+    description: String(description || 'Deposito Vamobet').slice(0, 255),
     expiresIn: Math.max(60, Math.min(86400, Number(expiresIn || 3600))),
     customer: {
-      name: cleanName.length >= 2 ? cleanName : 'Jogador Nacional Bet',
+      name: cleanName.length >= 2 ? cleanName : 'Jogador Vamobet',
       taxID: formattedTaxID,
       email: cleanEmail.includes('@') ? cleanEmail : 'pagamentos@borah.bet',
       phone: formattedPhone

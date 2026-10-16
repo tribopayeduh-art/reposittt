@@ -1,0 +1,33 @@
+/* Vamobet: emerald identity and readable artwork on every viewport. */
+:root{--pink:#00b85c;--pink2:#00e878;--green:#00e878;--amora-game-ratio:3 / 4}
+body{background:#070c09}
+.topbar{box-shadow:0 8px 30px #00000024;backdrop-filter:blur(18px)}
+.desktop-sidebar{border-right:1px solid #153222!important}
+.desktop-sidebar-nav button{border-radius:12px;transition:background .18s,color .18s}
+.desktop-sidebar-nav button.active{background:linear-gradient(100deg,#00b85c24,#00b85c08);color:#63f5a9}
+.brand-logo-image{filter:none!important;object-fit:contain}
+.topbar-brand-logo{width:148px;max-height:52px}
+.desktop-brand-logo{width:180px;max-height:62px}
+.menu-brand-logo{width:162px;max-height:56px}
+.zb-auth-logo{width:240px!important;max-height:80px!important}
+.loading-brand-logo{filter:drop-shadow(0 8px 24px #00e87824)!important}
+.home-carousel{border-radius:20px!important;box-shadow:0 18px 46px #00000030!important}
+.home-carousel-dots{padding:6px 9px;background:#06150bcc;border:1px solid #ffffff16;border-radius:20px;backdrop-filter:blur(10px)}
+.game-cover{aspect-ratio:var(--amora-game-ratio,3 / 4);background:#071c13;border-radius:16px}
+.game-cover>img{aspect-ratio:auto!important;object-fit:contain!important}
+.game-cover .igw-tag{top:auto;bottom:8px;left:8px;font-size:7px;opacity:.75}
+.game-meta strong{font-size:11px;line-height:1.5;max-width:150px}
+.game-meta small{font-size:9px;line-height:1.5}
+.section-header{margin-bottom:14px}
+.section-header h3{font-size:16px;font-weight:750;letter-spacing:-.4px}
+.primary-button,.deposit-cta{box-shadow:0 6px 22px #00b85c20}
+.primary-button:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid #5dffab;outline-offset:3px}
+@media(min-width:900px){.game-scroll{gap:14px;padding:6px 0 12px}.section-block{margin-top:28px}.home-carousel{margin-bottom:22px}.home-info-card{border-radius:16px}}
+@media(max-width:560px){.topbar-brand-logo{width:132px;max-height:48px}.home-carousel{border-radius:14px!important}.game-cover{border-radius:12px}.game-meta strong{font-size:10px}.game-meta small{font-size:8px}.section-header h3{font-size:14px}.games-grid{gap:16px 9px}.home-carousel-dots{bottom:6px;padding:4px 7px}}
+@media(prefers-reduced-motion:reduce){.desktop-sidebar-nav button{transition:none}}
+
+/* Provider labels stay below the art so titles remain unobstructed. */
+.game-cover .igw-tag{display:none}
+.game-meta{align-items:flex-start}
+.game-meta>div{min-width:0;flex:1}
+.game-meta strong{max-width:none;white-space:normal;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}

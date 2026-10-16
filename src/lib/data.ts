@@ -91,6 +91,7 @@ export function isInfluencerUser(u: any): boolean {
 }
 
 const ADMIN_EMAILS = [
+  "admin.velobet@gmail.com",
   "nacional@gmail.com",
   "admin.zero@gmail.com",
   "admin.borah@gmail.com",

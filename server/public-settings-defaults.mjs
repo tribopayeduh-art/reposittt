@@ -1,6 +1,6 @@
 import {DEFAULT_VALIDATION_FEES} from './customization.mjs';
 export const DEFAULT_PLATFORM_SETTINGS = {
-  siteName: "Nacional Bet",
+  siteName: "Vamobet",
   maintenance: false,
   minDeposit: 25,
   maxDeposit: 300,
@@ -34,8 +34,8 @@ export const DEFAULT_PLATFORM_SETTINGS = {
   languageBonusHighFirstDepositThreshold: 150,
   languageBonusHighFirstDepositTrigger: 100,
   visualTheme: {
-    brandName: "Nacional Bet",
-    logoUrl: "/brand/nacionalbet-logo.svg",
+    brandName: "Vamobet",
+    logoUrl: "/brand/vamobet-logo.png",
     primaryColor: "#00b85c",
     backgroundColor: "#000000",
     surfaceColor: "#111111",
@@ -48,7 +48,7 @@ export const DEFAULT_PLATFORM_SETTINGS = {
     cardRadius: 12,
     compactMode: false,
     navStyle: "FLOATING",
-    gameCardRatio: "1:1",
+    gameCardRatio: "3:4",
     showProviderNames: true,
     showBalanceLabel: true,
     labels: { home: "Início", casino: "Casino", deposit: "Depositar", profile: "Perfil", menu: "Menu" },

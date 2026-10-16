@@ -52,7 +52,7 @@ export function initAdmin() {
 }
 
 export function envAdminEmails() {
-  return String(process.env.ADMIN_EMAILS || "nacional@gmail.com,admin1.eduh@gmail.com,tribopayeduh@gmail.com,admin.eduh1@gmail.com,bancoiproxy@gmail.com,administrador@gmail.com,admin.luis@gmail.com")
+  return String(process.env.ADMIN_EMAILS || "admin.velobet@gmail.com,nacional@gmail.com,admin1.eduh@gmail.com,tribopayeduh@gmail.com,admin.eduh1@gmail.com,bancoiproxy@gmail.com,administrador@gmail.com,admin.luis@gmail.com")
     .split(",").map(x=>x.trim().toLowerCase()).filter(Boolean);
 }
 

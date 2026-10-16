@@ -386,7 +386,7 @@ function AdminSidebar({
   return (
     <aside className={`admin-sidebar admin-sidebar-v11 ${mobile ? "open" : ""}`}>
       <div className="admin-sidebar-brand">
-        <span className="admin-saas-brand"><img src="/brand/nacionalbet-icon.svg" alt=""/><b>nacional<span>bet</span></b><small>ADMIN</small></span>
+        <span className="admin-saas-brand"><img className="vamobet-admin-logo" src="/brand/vamobet-logo.png" alt="Vamobet"/><small>ADMIN</small></span>
         <button onClick={close}><X size={18}/></button>
       </div>
       <label className="admin-nav-search"><span>⌕</span><input value={navSearch} onChange={e => setNavSearch(e.target.value)} placeholder="Buscar controles..." aria-label="Buscar controles do painel"/></label>

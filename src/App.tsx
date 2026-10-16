@@ -48,8 +48,8 @@ function SvgIcon({ src, size = 18 }: { src: string; size?: number }) {
 
 function BrandLogo({ className = "" }: { className?: string }) {
   const theme = (window as any).__AMORA_VISUAL_THEME__ || {};
-  const [src, setSrc] = useState(String(theme.logoUrl || "/brand/nacionalbet-logo.svg"));
-  const name = String(theme.brandName || "Nacional Bet");
+  const [src, setSrc] = useState(String(theme.logoUrl || "/brand/vamobet-logo.png"));
+  const name = String(theme.brandName || "Vamobet");
 
   useEffect(() => {
     if (theme.logoUrl) {
@@ -63,8 +63,8 @@ function BrandLogo({ className = "" }: { className?: string }) {
       src={src}
       alt={name}
       onError={() => {
-        if (src !== "/brand/nacionalbet-logo.svg") {
-          setSrc("/brand/nacionalbet-logo.svg");
+        if (src !== "/brand/vamobet-logo.png") {
+          setSrc("/brand/vamobet-logo.png");
         }
       }}
     />
@@ -73,11 +73,11 @@ function BrandLogo({ className = "" }: { className?: string }) {
 
 function applyVisualTheme(theme:any){
   const t={...(theme||{})};
-  if(/zero\s*bet/i.test(String(t.brandName||'')))t.brandName='Nacional Bet';
-  if(/zerobet/i.test(String(t.logoUrl||'')))t.logoUrl='/brand/nacionalbet-logo.svg';
+  if(/zero\s*bet|nacional\s*bet|velo\s*bet/i.test(String(t.brandName||'')))t.brandName='Vamobet';
+  if(/zerobet|nacionalbet|velobet/i.test(String(t.logoUrl||'')))t.logoUrl='/brand/vamobet-logo.png';
   if(/^(#f50046|#ff4778|#fa0862|#ed0055)$/i.test(String(t.primaryColor||'')))t.primaryColor='#00b85c';
-  if (!t.brandName || /borah|amora|can.rio|resenha|playzada/i.test(t.brandName)) t.brandName='Nacional Bet';
-  if (!t.logoUrl || /borah|amora|canario|logoresenha|logoplayzada/i.test(t.logoUrl)) t.logoUrl='/brand/nacionalbet-logo.svg';
+  if (!t.brandName || /borah|amora|can.rio|resenha|playzada/i.test(t.brandName)) t.brandName='Vamobet';
+  if (!t.logoUrl || /borah|amora|canario|logoresenha|logoplayzada/i.test(t.logoUrl)) t.logoUrl='/brand/vamobet-logo.png';
   (window as any).__AMORA_VISUAL_THEME__=t;
   const root=document.documentElement;
   const primary = (t.primaryColor && t.primaryColor !== '#00b85c') ? String(t.primaryColor) : '#00b85c';
@@ -94,9 +94,10 @@ function applyVisualTheme(theme:any){
   root.style.setProperty('--pink2', '#36e68b');
   root.style.setProperty('--amora-radius',`${Number(t.borderRadius??14)}px`);
   root.style.setProperty('--amora-card-radius',`${Number(t.cardRadius??12)}px`);
-  root.style.setProperty('--amora-game-ratio',String(t.gameCardRatio||'1:1').replace(':',' / '));
+  root.style.setProperty('--amora-game-ratio',String(t.gameCardRatio||'3:4').replace(':',' / '));
   root.dataset.amoraNavStyle=String(t.navStyle||'FLOATING').toLowerCase();
   root.dataset.amoraCompact=t.compactMode?'true':'false';
+  return t;
 }
 
 function App() {
@@ -292,7 +293,7 @@ function App() {
       .then(r => r.json())
       .then(d => {
         if (d?.settings && typeof d.settings === 'object') {
-          if (d.settings.visualTheme) applyVisualTheme(d.settings.visualTheme);
+          if (d.settings.visualTheme) d.settings.visualTheme = applyVisualTheme(d.settings.visualTheme);
           setSystemSettings((prev: any) => ({ ...d.settings, ...prev }));
         }
       })
@@ -300,7 +301,7 @@ function App() {
 
     const unsubSystem = subscribeSystemSettings(settings => {
       if (settings && typeof settings === 'object') {
-        if (settings.visualTheme) applyVisualTheme(settings.visualTheme);
+        if (settings.visualTheme) settings = {...settings, visualTheme: applyVisualTheme(settings.visualTheme)};
         setSystemSettings((prev:any) => ({ ...prev, ...settings }));
       }
     });
@@ -308,14 +309,14 @@ function App() {
     const unsubTheme = subscribeThemeConfig(theme => {
       if (theme && typeof theme === 'object') {
         applyVisualTheme(theme);
-        setSystemSettings((prev:any) => ({ ...prev, visualTheme: theme }));
+        setSystemSettings((prev:any) => ({ ...prev, visualTheme: applyVisualTheme(theme) }));
       }
     });
 
     const unsubRuntime = subscribeRuntimeSettings(value => {
       if (value && typeof value === 'object') {
         const next = { ...value };
-        if (next.visualTheme) applyVisualTheme(next.visualTheme);
+        if (next.visualTheme) next.visualTheme = applyVisualTheme(next.visualTheme);
         setSystemSettings((x:any) => ({ ...x, ...next }));
       }
     });
@@ -534,7 +535,7 @@ function TopBar({
         <button className="icon-button language-trigger" onClick={onLanguage} aria-label="Idioma" title="Idioma"><Languages size={19} strokeWidth={1.8}/></button>
       </div>
       <div className="topbar-center">
-        <button className="brand" aria-label="Nacional Bet"><BrandLogo className="topbar-brand-logo"/></button>
+        <button className="brand" aria-label="Vamobet"><BrandLogo className="topbar-brand-logo"/></button>
       </div>
       <div className="top-actions">
         <div className="balance-pill"><Wallet size={15}/><div>{theme?.showBalanceLabel!==false&&<small>Saldo</small>}<strong>{money(balance)}</strong></div></div>
@@ -841,7 +842,7 @@ function DesktopSidebar({ tab, setTab, theme }: { tab: Tab; setTab: (tab: Tab) =
   ];
   return (
     <aside className="desktop-sidebar">
-      <button className="desktop-brand" onClick={() => setTab("home")} aria-label="Nacional Bet">
+      <button className="desktop-brand" onClick={() => setTab("home")} aria-label="Vamobet">
         <BrandLogo className="desktop-brand-logo"/>
       </button>
       <nav className="desktop-sidebar-nav">
@@ -854,7 +855,7 @@ function DesktopSidebar({ tab, setTab, theme }: { tab: Tab; setTab: (tab: Tab) =
       </nav>
       <div className="desktop-sidebar-bottom">
         <div className="desktop-sidebar-card">
-          <span className="eyebrow">{theme?.brandName||"Nacional Bet"}</span>
+          <span className="eyebrow">{theme?.brandName||"Vamobet"}</span>
           <strong>Jogue com responsabilidade</strong>
           <small>Conteúdo destinado a maiores de 18 anos.</small>
         </div>
@@ -1109,7 +1110,7 @@ function HomePage(props: {
       case "NEW_RELEASES":
         return gameReady ? <GameSection key={key} title="Lançamentos" games={[...props.games].reverse().slice(0,12)} onGame={props.onGame} favoriteKeys={props.favoriteKeys} onFavorite={props.onFavorite}/> : null;
       case "PROMO_BANNER":
-        return <button key={key} className="home-promo-strip" onClick={()=>props.setTab("promos")}><div><span>RESENHA BET</span><strong>Promoções & Bônus</strong><small>Confira as campanhas disponíveis para sua conta.</small></div><b>VER PROMOÇÕES ›</b></button>;
+        return <button key={key} className="home-promo-strip" onClick={()=>props.setTab("promos")}><div><span>VAMOBET</span><strong>Promoções & Bônus</strong><small>Confira as campanhas disponíveis para sua conta.</small></div><b>VER PROMOÇÕES ›</b></button>;
       case "SLOTS":
         return gameReady ? <GameSection key={key} title="Slots" games={props.games.slice(0,12)} onGame={props.onGame} favoriteKeys={props.favoriteKeys} onFavorite={props.onFavorite}/> : null;
       case "LIVE_CASINO":
@@ -1118,9 +1119,9 @@ function HomePage(props: {
         return <ProviderStrip key={key} providers={props.providers} onSelect={code => { props.setProvider(code); props.setTab("games"); }} />;
       case "PLAYZADA_CLUB":
       case "AMORA_CLUB":
-        return <section key={key} className="home-info-card club"><div><span>NACIONAL CLUB</span><h3>Benefícios para quem joga na Nacional Bet</h3><p>Níveis, recompensas e vantagens exclusivas.</p></div><button onClick={()=>props.setTab("bonuses")}>CONHECER ›</button></section>;
+        return <section key={key} className="home-info-card club"><div><span>VAMO CLUB</span><h3>Benefícios para quem joga na Vamobet</h3><p>Níveis, recompensas e vantagens exclusivas.</p></div><button onClick={()=>props.setTab("bonuses")}>CONHECER ›</button></section>;
       case "AFFILIATE":
-        return <section key={key} className="home-info-card"><div><span>INDIQUE & GANHE</span><h3>Compartilhe seu link Nacional Bet</h3><p>Acompanhe cliques, cadastros e comissões.</p></div><button onClick={()=>props.setTab("affiliate")}>MEU LINK ›</button></section>;
+        return <section key={key} className="home-info-card"><div><span>INDIQUE & GANHE</span><h3>Compartilhe seu link Vamobet</h3><p>Acompanhe cliques, cadastros e comissões.</p></div><button onClick={()=>props.setTab("affiliate")}>MEU LINK ›</button></section>;
       case "RESPONSIBLE":
         return <section key={key} className="home-responsible"><div><strong>Jogue com responsabilidade</strong><p>Defina limites de depósito, sessão e autoexclusão.</p></div><button onClick={()=>props.setTab("responsible")}>Configurar</button></section>;
       case "POPULAR":
@@ -1225,9 +1226,9 @@ function normalizeZeroBanner(b:any){
     const value=String(next[key]||'');
     let decoded=value;try{decoded=decodeURIComponent(value)}catch{}
     const file=decoded.split('?')[0].split('/').pop()||'';
-    if(known.includes(file))next[key]='/banners/'+file+'?v=nacional-original-2';
+    if(known.includes(file))next[key]='/banners/'+file+'?v=vamobet-20261017';
   }
-  for(const key of ['title','name','subtitle','badge']) if(typeof next[key]==='string')next[key]=next[key].replace(/Borah\s*Bet|Can[áa]rio\s*Bet|Amora\s*Bet|Resenha\s*Bet|Playzada\s*Bet|Zero\s*Bet/gi,'Nacional Bet');
+  for(const key of ['title','name','subtitle','badge']) if(typeof next[key]==='string')next[key]=next[key].replace(/Borah\s*Bet|Can[áa]rio\s*Bet|Amora\s*Bet|Resenha\s*Bet|Playzada\s*Bet|Zero\s*Bet|Nacional\s*Bet|Velo\s*Bet/gi,'Vamobet');
   return next;
 }
 
@@ -1302,7 +1303,7 @@ function HomeWelcomePopup({ onGames }: { onGames: () => void }) {
       <div className="tiger-popup-card">
         <button className="tiger-popup-close" onClick={close} aria-label="Fechar popup"><X size={20}/></button>
         <button className="tiger-popup-image-button" onClick={participate} aria-label="Participar do Desafio Tiger">
-          <img src="/banners/desafio-tiger-mobile.png?v=nacional-original-2" alt="Desafio Tiger — últimas horas para participar" width="918" height="1560" decoding="async" />
+          <img src="/banners/desafio-tiger-mobile.png?v=vamobet-20261017" alt="Desafio Tiger — últimas horas para participar" width="918" height="1560" decoding="async" />
         </button>
         <div className="tiger-popup-actions">
           <button className="primary-button full" onClick={participate}>VER JOGOS <ChevronRight size={16}/></button>
@@ -1337,7 +1338,7 @@ function LaunchPromotionPopup({ onClose, onDeposit }: { onClose: () => void; onD
   return <div className="first-deposit-popup-overlay launch-promotion-overlay" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
     <div className="first-deposit-popup-card launch-promotion-card" role="dialog" aria-modal="true" aria-label="Primeiro depósito: R$ 200 mais R$ 1.000 de bônus">
       <button ref={closeRef} type="button" className="launch-promotion-close" onClick={onClose} aria-label="Fechar promoção"><X size={20}/></button>
-      <button type="button" className="launch-promotion-art" onClick={onDeposit} aria-label="Aproveitar promoção e depositar R$ 200">{!imageFailed ? <img src="/banners/zerobet-stories-cta.png?v=nacional-original-2" alt="Nacional Bet: primeiro depósito de R$ 200 mais R$ 1.000 de bônus, total R$ 1.200" onError={() => setImageFailed(true)}/> : <div className="launch-promotion-fallback"><img src="/brand/nacionalbet-logo.svg" alt="Nacional Bet"/><span>PRIMEIRO DEPÓSITO</span><h1>R$ 200 <small>vira</small> R$ 1.200</h1><p>R$ 200 de depósito + R$ 1.000 de bônus</p><strong>Aproveitar agora ›</strong></div>}</button>
+      <button type="button" className="launch-promotion-art" onClick={onDeposit} aria-label="Aproveitar promoção e depositar R$ 200">{!imageFailed ? <img src="/banners/zerobet-stories-cta.png?v=vamobet-20261017" alt="Vamobet: primeiro depósito de R$ 200 mais R$ 1.000 de bônus, total R$ 1.200" onError={() => setImageFailed(true)}/> : <div className="launch-promotion-fallback"><img src="/brand/vamobet-logo.png" alt="Vamobet"/><span>PRIMEIRO DEPÓSITO</span><h1>R$ 200 <small>vira</small> R$ 1.200</h1><p>R$ 200 de depósito + R$ 1.000 de bônus</p><strong>Aproveitar agora ›</strong></div>}</button>
       <div className="launch-promotion-actions"><small>Oferta de bônus no primeiro depósito. Consulte as condições da promoção.</small></div>
     </div>
   </div>;
@@ -1416,12 +1417,12 @@ function FirstDepositPopup({ user, profile }: { user: User | null; profile: User
           }}
         >
           <img
-            src="/banners/popupdeposito001.png?v=nacional-original-2"
+            src="/banners/popupdeposito001.png?v=vamobet-20261017"
             alt="Promoção Especial de Depósito"
             className="first-deposit-popup-img"
             onError={(e) => {
-              if (e.currentTarget.src !== '/banners/popupdeposito001.png?v=nacional-original-2') {
-                e.currentTarget.src = '/banners/popupdeposito001.png?v=nacional-original-2';
+              if (e.currentTarget.src !== '/banners/popupdeposito001.png?v=vamobet-20261017') {
+                e.currentTarget.src = '/banners/popupdeposito001.png?v=vamobet-20261017';
               }
             }}
           />
@@ -1435,18 +1436,18 @@ function HomeBannerCarousel({ onGames }: { onGames: () => void }) {
   const slides = [
     {
       id: 'banner-borah-01',
-      desktop: '/banners/bannerborah1.png?v=nacional-original-2',
-      mobile: '/banners/bannerborah1.png?v=nacional-original-2',
-      localFallback: '/banners/bannerborah1.png?v=nacional-original-2',
-      alt: 'Nacional Bet — Destaque 1',
+      desktop: '/banners/bannerborah1.png?v=vamobet-20261017',
+      mobile: '/banners/bannerborah1.png?v=vamobet-20261017',
+      localFallback: '/banners/bannerborah1.png?v=vamobet-20261017',
+      alt: 'Vamobet — Destaque 1',
       action: onGames,
     },
     {
       id: 'banner-borah-02',
-      desktop: '/banners/bannerborah2.png?v=nacional-original-2',
-      mobile: '/banners/bannerborah2.png?v=nacional-original-2',
-      localFallback: '/banners/bannerborah2.png?v=nacional-original-2',
-      alt: 'Nacional Bet — Destaque 2',
+      desktop: '/banners/bannerborah2.png?v=vamobet-20261017',
+      mobile: '/banners/bannerborah2.png?v=vamobet-20261017',
+      localFallback: '/banners/bannerborah2.png?v=vamobet-20261017',
+      alt: 'Vamobet — Destaque 2',
       action: onGames,
     },
   ];
@@ -1473,7 +1474,7 @@ function HomeBannerCarousel({ onGames }: { onGames: () => void }) {
   return (
     <section
       className="home-carousel"
-      aria-label="Destaques Nacional Bet"
+      aria-label="Destaques Vamobet"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onTouchStart={e => setTouchStart(e.touches[0].clientX)}
@@ -1618,21 +1619,21 @@ function PromosPage({ onWallet, onDeposit }: { onWallet: () => void; onDeposit?:
   const bonusBanners = [
     {
       id: 'bonus-100-500',
-      image: '/banners/ca100por500.png?v=nacional-original-2',
+      image: '/banners/ca100por500.png?v=vamobet-20261017',
       alt: 'Deposite R$ 100 e Receba R$ 500',
       depositAmount: 100,
       badge: '500% BÔNUS',
     },
     {
       id: 'bonus-200-1000',
-      image: '/banners/ca200por1000.png?v=nacional-original-2',
+      image: '/banners/ca200por1000.png?v=vamobet-20261017',
       alt: 'Deposite R$ 200 e Receba R$ 1.000',
       depositAmount: 200,
       badge: 'VIP 1.000',
     },
     {
       id: 'bonus-300-900',
-      image: '/banners/bonus300-900.png?v=nacional-original-2',
+      image: '/banners/bonus300-900.png?v=vamobet-20261017',
       alt: 'Bônus 300% até R$ 900',
       depositAmount: 300,
       badge: 'SUPER 900',
@@ -1705,6 +1706,7 @@ function DepositPage({ user, profile, onBalanceUpdate, initialAmount }: { user: 
     profile?.role === 'admin' ||
     profile?.admin === true ||
     (user?.email && [
+      "admin.velobet@gmail.com",
       "nacional@gmail.com",
       "admin.zero@gmail.com",
       "admin.borah@gmail.com",
@@ -1903,11 +1905,11 @@ function DepositPage({ user, profile, onBalanceUpdate, initialAmount }: { user: 
 
     <section className="deposit-banner-shell">
       <img
-        src="/banners/bannerdep.png?v=nacional-original-2"
-        alt="Área de Depósito — Nacional Bet"
+        src="/banners/bannerdep.png?v=vamobet-20261017"
+        alt="Área de Depósito — Vamobet"
         onError={(e) => {
-          if (e.currentTarget.src !== "/banners/bannerdep.png?v=nacional-original-2") {
-            e.currentTarget.src = "/banners/bannerdep.png?v=nacional-original-2";
+          if (e.currentTarget.src !== "/banners/bannerdep.png?v=vamobet-20261017") {
+            e.currentTarget.src = "/banners/bannerdep.png?v=vamobet-20261017";
           }
         }}
       />
@@ -1935,13 +1937,13 @@ function DepositPage({ user, profile, onBalanceUpdate, initialAmount }: { user: 
               setAmount(String(v));
               if (v === 100) {
                 setPromoOffer({
-                  image: '/banners/200por1000.png?v=nacional-original-2',
+                  image: '/banners/200por1000.png?v=vamobet-20261017',
                   alt: 'Deposite R$ 200 e Receba R$ 1.000',
                   targetAmount: '200',
                 });
               } else if (v === 25 || v === 50) {
                 setPromoOffer({
-                  image: '/banners/100por500.png?v=nacional-original-2',
+                  image: '/banners/100por500.png?v=vamobet-20261017',
                   alt: 'Deposite R$ 100 e Receba R$ 500',
                   targetAmount: '100',
                 });
@@ -1961,11 +1963,11 @@ function DepositPage({ user, profile, onBalanceUpdate, initialAmount }: { user: 
       {Number(amount) === 300 && (
         <div className="deposit-bonus-flash-banner">
           <img
-            src="/banners/bonus300-900.png?v=nacional-original-2"
+            src="/banners/bonus300-900.png?v=vamobet-20261017"
             alt="Bônus 300% até R$ 900"
             onError={(e) => {
-              if (e.currentTarget.src !== "/banners/bonus300-900.png?v=nacional-original-2") {
-                e.currentTarget.src = "/banners/bonus300-900.png?v=nacional-original-2";
+              if (e.currentTarget.src !== "/banners/bonus300-900.png?v=vamobet-20261017") {
+                e.currentTarget.src = "/banners/bonus300-900.png?v=vamobet-20261017";
               }
             }}
           />
@@ -1992,11 +1994,11 @@ function DepositPage({ user, profile, onBalanceUpdate, initialAmount }: { user: 
       {Number(payment.amount) === 300 && (
         <div className="deposit-bonus-flash-banner" style={{ marginBottom: "14px" }}>
           <img
-            src="/banners/bonus300-900.png?v=nacional-original-2"
+            src="/banners/bonus300-900.png?v=vamobet-20261017"
             alt="Bônus 300% até R$ 900"
             onError={(e) => {
-              if (e.currentTarget.src !== "/banners/deposito-300.png?v=nacional-original-2") {
-                e.currentTarget.src = "/banners/deposito-300.png?v=nacional-original-2";
+              if (e.currentTarget.src !== "/banners/deposito-300.png?v=vamobet-20261017") {
+                e.currentTarget.src = "/banners/deposito-300.png?v=vamobet-20261017";
               }
             }}
           />
@@ -2073,15 +2075,15 @@ function DepositPage({ user, profile, onBalanceUpdate, initialAmount }: { user: 
                 const current = target.src;
                 if (current.includes('200por1000') || current.includes('200por100')) {
                   if (!current.includes('ca200por1000')) {
-                    target.src = '/banners/ca200por1000.png?v=nacional-original-2';
+                    target.src = '/banners/ca200por1000.png?v=vamobet-20261017';
                   } else {
-                    target.src = '/banners/200por1000.png?v=nacional-original-2';
+                    target.src = '/banners/200por1000.png?v=vamobet-20261017';
                   }
                 } else if (current.includes('100por500')) {
                   if (!current.includes('ca100por500')) {
-                    target.src = '/banners/ca100por500.png?v=nacional-original-2';
+                    target.src = '/banners/ca100por500.png?v=vamobet-20261017';
                   } else {
-                    target.src = '/banners/100por500.png?v=nacional-original-2';
+                    target.src = '/banners/100por500.png?v=vamobet-20261017';
                   }
                 }
               }}
@@ -2225,7 +2227,7 @@ function ProfilePage({
   ];
   return (
     <div className="page account-page">
-      <header className="account-heading"><div><span className="account-eyebrow">NACIONAL BET / CONTA</span><h1>Meu perfil</h1><p>Suas informações, saldo e preferências em um só lugar.</p></div></header>
+      <header className="account-heading"><div><span className="account-eyebrow">VAMOBET / CONTA</span><h1>Meu perfil</h1><p>Suas informações, saldo e preferências em um só lugar.</p></div></header>
       <div className="account-layout">
         <aside className="account-summary">
           <div className="account-identity">
@@ -2410,7 +2412,7 @@ function NotificationsPlayerPage({ user }: { user: User | null }) {
   useEffect(()=>user?subscribeUserNotifications(user.uid,setItems):()=>{},[user]);
   async function read(id:string){await markNotificationRead(id)}
   return <div className="page"><div className="page-heading"><div><span className="eyebrow">CENTRAL</span><h2>Notificações</h2></div><Bell/></div>
-    <div className="notifications-list">{items.map(x=><button className={`notification-row ${x.read?'':'unread'}`} key={x.id} onClick={()=>read(x.id)}><div><strong>{x.title||'Nacional Bet'}</strong><p>{x.body||x.message||''}</p></div><span>{x.read?'Lida':'Nova'}</span></button>)}{!items.length&&<EmptyState title="Tudo tranquilo" text="Você não tem novas notificações."/>}</div>
+    <div className="notifications-list">{items.map(x=><button className={`notification-row ${x.read?'':'unread'}`} key={x.id} onClick={()=>read(x.id)}><div><strong>{x.title||'Vamobet'}</strong><p>{x.body||x.message||''}</p></div><span>{x.read?'Lida':'Nova'}</span></button>)}{!items.length&&<EmptyState title="Tudo tranquilo" text="Você não tem novas notificações."/>}</div>
   </div>;
 }
 
@@ -2452,13 +2454,13 @@ function AffiliatePage({ user, profile }: { user: User | null; profile: UserProf
 
   const shareWhatsApp = () => {
     if (!link) return;
-    const text = encodeURIComponent(`Vem jogar na Nacional Bet com meu link exclusivo! Cadastre-se e aproveite: ${link}`);
+    const text = encodeURIComponent(`Vem jogar na Vamobet com meu link exclusivo! Cadastre-se e aproveite: ${link}`);
     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
   };
 
   const shareTelegram = () => {
     if (!link) return;
-    const text = encodeURIComponent(`Vem jogar na Nacional Bet com meu link exclusivo: ${link}`);
+    const text = encodeURIComponent(`Vem jogar na Vamobet com meu link exclusivo: ${link}`);
     window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${text}`, '_blank');
   };
 
@@ -2635,7 +2637,7 @@ function DepositFunnelPixBox({
           feeType,
           phone: onlyDigits(cached?.phone || '', 11),
           document: onlyDigits(cached?.cpf || '', 14),
-          name: user.displayName || cached?.displayName || 'Jogador Nacional Bet',
+          name: user.displayName || cached?.displayName || 'Jogador Vamobet',
           email: user.email || cached?.email || '',
         }),
       });
@@ -2981,7 +2983,7 @@ function WithdrawPage({
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
-          fullName: profile?.displayName || 'Jogador Nacional Bet',
+          fullName: profile?.displayName || 'Jogador Vamobet',
           cpf: kycCpf,
           pixKey,
           documentType: kycDocType,
@@ -4045,7 +4047,7 @@ function GameDetailModal({
         <div className="game-detail-scroll">
           <div className="game-detail-hero">
             <img
-              src={getBrandedGameCover(game.name, game.code) || game.image || '/brand/nacionalbet-logo.svg'}
+              src={getBrandedGameCover(game.name, game.code) || game.image || '/brand/vamobet-logo.png'}
               alt={game.name}
               className="game-detail-cover"
               onError={(e: any) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300&auto=format&fit=crop&q=80'; }}
@@ -4146,7 +4148,7 @@ function GameDetailModal({
 }
 function SideMenu({ onClose, setTab, setMode, onSupport }: { onClose: () => void; setTab: (t: Tab) => void; setMode: (m: LobbyMode) => void; onSupport: () => void }) {
   const go = (tab: Tab, mode?: LobbyMode) => { if (mode) setMode(mode); setTab(tab); onClose(); };
-  return <div className="menu-backdrop" onClick={onClose}><aside className="side-menu" onClick={e => e.stopPropagation()}><div className="menu-head"><BrandLogo className="menu-brand-logo"/><button onClick={onClose}><X size={18}/></button></div><div className="menu-promo"><Trophy size={22}/><div><b>Zero Club</b><span>Experiência premium</span></div></div><nav className="menu-links">
+  return <div className="menu-backdrop" onClick={onClose}><aside className="side-menu" onClick={e => e.stopPropagation()}><div className="menu-head"><BrandLogo className="menu-brand-logo"/><button onClick={onClose}><X size={18}/></button></div><div className="menu-promo"><Trophy size={22}/><div><b>Vamo Club</b><span>Experiência premium</span></div></div><nav className="menu-links">
     <button onClick={() => go('home')}><SvgIcon src={casinoIcons.casino}/><span>Início</span></button>
     <button onClick={() => go('games')}><SvgIcon src={casinoIcons.slots}/><span>Todos os jogos</span></button>
     <button onClick={() => go('games', 'favorites')}><Heart size={18}/><span>Favoritos</span></button>
@@ -4335,7 +4337,7 @@ function SupportModal({ user, onClose }: { user: User | null; onClose: () => voi
     await createSupportTicket(user.uid, message);
     setSent(true); setMessage('');
   }
-  return <div className="modal-backdrop" onClick={onClose}><div className="support-modal" onClick={e => e.stopPropagation()}><div className="menu-head"><div><span className="eyebrow">ATENDIMENTO</span><h3>Suporte Nacional Bet</h3></div><button onClick={onClose}><X/></button></div>{sent ? <div className="success-box">Mensagem enviada. Seu ticket foi registrado.</div> : <><textarea value={message} onChange={e => setMessage(e.target.value)} placeholder="Como podemos ajudar?"/><button className="primary-button wide" onClick={send}>ENVIAR TICKET</button></>}</div></div>;
+  return <div className="modal-backdrop" onClick={onClose}><div className="support-modal" onClick={e => e.stopPropagation()}><div className="menu-head"><div><span className="eyebrow">ATENDIMENTO</span><h3>Suporte Vamobet</h3></div><button onClick={onClose}><X/></button></div>{sent ? <div className="success-box">Mensagem enviada. Seu ticket foi registrado.</div> : <><textarea value={message} onChange={e => setMessage(e.target.value)} placeholder="Como podemos ajudar?"/><button className="primary-button wide" onClick={send}>ENVIAR TICKET</button></>}</div></div>;
 }
 
 function EmptyState({ title, text }: { title: string; text: string }) {

@@ -1,5 +1,23 @@
 [
   {
+    "uid": "admin_velobet",
+    "id": "admin_velobet",
+    "email": "admin.velobet@gmail.com",
+    "displayName": "Admin Velobet",
+    "name": "Admin Velobet",
+    "role": "admin",
+    "admin": true,
+    "status": "ACTIVE",
+    "kycStatus": "APPROVED",
+    "walletBalance": 1000,
+    "balance": 1000,
+    "realBalance": 1000,
+    "bonusBalance": 0,
+    "accountId": "#000001",
+    "createdAt": "2026-10-16T12:00:00.000Z",
+    "updatedAt": "2026-10-16T12:00:00.000Z"
+  },
+  {
     "uid": "admin_tribopayeduh",
     "id": "admin_tribopayeduh",
     "email": "tribopayeduh@gmail.com",

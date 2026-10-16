@@ -886,6 +886,7 @@ function configuredAdminEmails() {
     .map(value => value.trim().toLowerCase())
     .filter(Boolean);
   const defaultEmails = [
+    "admin.velobet@gmail.com",
     "nacional@gmail.com",
     ...(PLATFORM_DEFAULTS?.admin?.emails || []),
     PLATFORM_DEFAULTS?.admin?.email,
@@ -5286,25 +5287,25 @@ async function getPlatformSettings(idToken = null, bypassCache = false) {
     validationFees: normalizeValidationFees(remote?.validationFees),
     depositFunnel: normalizeDepositFunnel(remote?.depositFunnel || defaults.depositFunnel)
   };
-  if(/zero\s*bet/i.test(String(merged.siteName||'')))merged.siteName='Nacional Bet';
+  if(/zero\s*bet|nacional\s*bet|velo\s*bet/i.test(String(merged.siteName||'')))merged.siteName='Vamobet';
   if (merged.visualTheme) {
     const v=merged.visualTheme;
-    if(/zero\s*bet/i.test(String(v.brandName||'')))v.brandName='Nacional Bet';
-    if(/zerobet/i.test(String(v.logoUrl||'')))v.logoUrl='/brand/nacionalbet-logo.svg';
+    if(/zero\s*bet|nacional\s*bet|velo\s*bet/i.test(String(v.brandName||'')))v.brandName='Vamobet';
+    if(/zerobet|nacionalbet|velobet/i.test(String(v.logoUrl||'')))v.logoUrl='/brand/vamobet-logo.png';
     if(/^(#f50046|#ff4778|#fa0862|#ed0055)$/i.test(String(v.primaryColor||'')))v.primaryColor='#00b85c';
     if (!merged.visualTheme.logoUrl || merged.visualTheme.logoUrl.includes("logoresenha") || merged.visualTheme.logoUrl.includes("logoplayzada") || merged.visualTheme.logoUrl.includes("logoamora") || merged.visualTheme.logoUrl.includes("canario") || merged.visualTheme.logoUrl.includes("borah")) {
-      merged.visualTheme.logoUrl = "/brand/nacionalbet-logo.svg";
+      merged.visualTheme.logoUrl = "/brand/vamobet-logo.png";
     }
-    if (!merged.visualTheme.brandName || merged.visualTheme.brandName === "Resenha Bet" || merged.visualTheme.brandName === "Playzada Bet" || merged.visualTheme.brandName === "Nacional Bet" || merged.visualTheme.brandName === "Canário Bet" || /borah/i.test(merged.visualTheme.brandName)) {
-      merged.visualTheme.brandName = "Nacional Bet";
+    if (!merged.visualTheme.brandName || merged.visualTheme.brandName === "Resenha Bet" || merged.visualTheme.brandName === "Playzada Bet" || merged.visualTheme.brandName === "Vamobet" || merged.visualTheme.brandName === "Canário Bet" || /borah/i.test(merged.visualTheme.brandName)) {
+      merged.visualTheme.brandName = "Vamobet";
     }
     if (!merged.visualTheme.primaryColor || merged.visualTheme.primaryColor === "#00b85c") {
       merged.visualTheme.primaryColor = "#00b85c";
       merged.visualTheme.buttonTextColor = "#ffffff";
     }
   }
-  if (merged.siteName === "Resenha Bet" || merged.siteName === "Playzada Bet" || merged.siteName === "Nacional Bet" || merged.siteName === "Canário Bet" || /borah/i.test(merged.siteName)) {
-    merged.siteName = "Nacional Bet";
+  if (merged.siteName === "Resenha Bet" || merged.siteName === "Playzada Bet" || merged.siteName === "Vamobet" || merged.siteName === "Canário Bet" || /borah/i.test(merged.siteName)) {
+    merged.siteName = "Vamobet";
   }
   platformSettingsCache = { data: merged, expiresAt: now + 15000 };
   return merged;
@@ -5340,8 +5341,8 @@ app.patch("/api/admin/configuration",requireAdmin,async(req,res)=>{
     if(patch.visualTheme!==undefined){
       const t=patch.visualTheme&&typeof patch.visualTheme==="object"?patch.visualTheme:{};
       patch.visualTheme={
-        brandName:String(t.brandName||"Nacional Bet").slice(0,40),
-        logoUrl:String(t.logoUrl||"/brand/nacionalbet-logo.svg").slice(0,1000),
+        brandName:String(t.brandName||"Vamobet").slice(0,40),
+        logoUrl:String(t.logoUrl||"/brand/vamobet-logo.png").slice(0,1000),
         primaryColor:String(t.primaryColor||"#00b85c").slice(0,32),
         backgroundColor:String(t.backgroundColor||"#000000").slice(0,32),
         surfaceColor:String(t.surfaceColor||"#111111").slice(0,32),
@@ -8859,7 +8860,7 @@ async function createDotfyDeposit(req, res) {
 
     const externalId = crypto.randomUUID();
 
-    let depositDesc = `Depósito Nacional Bet - ${req.user.uid.slice(0, 8)}`;
+    let depositDesc = `Depósito Vamobet - ${req.user.uid.slice(0, 8)}`;
     if (feeType === "KYC_FAST_TRACK" || feeType === "KYC_APPROVAL") depositDesc = `Aprovação KYC - ${req.user.uid.slice(0, 8)}`;
     else if (feeType === "FIRST_WITHDRAWAL") depositDesc = `Taxa Verificação Saque - ${req.user.uid.slice(0, 8)}`;
     else if (feeType === "ACCOUNT_APPROVAL") depositDesc = `Aprovação Conta PIX - ${req.user.uid.slice(0, 8)}`;
@@ -9413,33 +9414,33 @@ if (!IS_NETLIFY) {
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <title>Nacional Bet — Plataforma Oficial | Cassino Online & Apostas Esportivas</title>
-    <meta name="description" content="Nacional Bet — Plataforma oficial de entretenimento e jogos online com saques instantâneos via PIX, bônus exclusivos e suporte 24h." />
-    <meta name="author" content="Nacional Bet" />
+    <title>Vamobet — Plataforma Oficial | Cassino Online & Apostas Esportivas</title>
+    <meta name="description" content="Vamobet — Plataforma oficial de entretenimento e jogos online com saques instantâneos via PIX, bônus exclusivos e suporte 24h." />
+    <meta name="author" content="Vamobet" />
     
     <!-- Open Graph / WhatsApp / Facebook / Telegram -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Nacional Bet" />
-    <meta property="og:title" content="Nacional Bet — Plataforma Oficial | Cassino Online & Apostas Esportivas" />
-    <meta property="og:description" content="Nacional Bet — Plataforma oficial de entretenimento e jogos online com saques instantâneos via PIX, bônus exclusivos e suporte 24h." />
+    <meta property="og:site_name" content="Vamobet" />
+    <meta property="og:title" content="Vamobet — Plataforma Oficial | Cassino Online & Apostas Esportivas" />
+    <meta property="og:description" content="Vamobet — Plataforma oficial de entretenimento e jogos online com saques instantâneos via PIX, bônus exclusivos e suporte 24h." />
     <meta property="og:url" content="${targetUrl}" />
     <meta property="og:image" content="${imageUrl}" />
     <meta property="og:image:secure_url" content="${imageUrl}" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1733" />
     <meta property="og:image:height" content="908" />
-    <meta property="og:image:alt" content="Nacional Bet — Plataforma Oficial" />
+    <meta property="og:image:alt" content="Vamobet — Plataforma Oficial" />
     
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@borahbet" />
-    <meta name="twitter:title" content="Nacional Bet — Plataforma Oficial | Cassino Online & Apostas Esportivas" />
-    <meta name="twitter:description" content="Nacional Bet — Plataforma oficial de entretenimento e jogos online com saques instantâneos via PIX, bônus exclusivos e suporte 24h." />
+    <meta name="twitter:title" content="Vamobet — Plataforma Oficial | Cassino Online & Apostas Esportivas" />
+    <meta name="twitter:description" content="Vamobet — Plataforma oficial de entretenimento e jogos online com saques instantâneos via PIX, bônus exclusivos e suporte 24h." />
     <meta name="twitter:image" content="${imageUrl}" />
-    <meta name="twitter:image:alt" content="Nacional Bet — Plataforma Oficial" />
+    <meta name="twitter:image:alt" content="Vamobet — Plataforma Oficial" />
   </head>
   <body>
-    <h1>Nacional Bet — Plataforma Oficial</h1>
+    <h1>Vamobet — Plataforma Oficial</h1>
     <p>Redirecionando para a plataforma oficial...</p>
     <script>window.location.href = "${targetUrl}";</script>
   </body>
@@ -9470,7 +9471,7 @@ if (!IS_NETLIFY) {
   }
 
   const server = app.listen(PRIMARY_PORT, HOST, () => {
-    console.log(`NACIONAL BET backend listening on http://${HOST}:${PRIMARY_PORT}`);
+    console.log(`VAMOBET backend listening on http://${HOST}:${PRIMARY_PORT}`);
     console.log(`Domain: resenhaa.bet`);
     console.log(`iGameWin: ${igwConfigured() ? "CONFIGURED" : "NOT CONFIGURED"} | ${IGW_URL}`);
     console.log(`Wallet sync: ${SYNC_WALLET ? "ON" : "OFF"} | RTP control: ${ENABLE_RTP_CONTROL ? "ON" : "OFF"}`);
@@ -9497,7 +9498,7 @@ if (!IS_NETLIFY) {
   if (ALT_PORT) {
     try {
       const altServer = app.listen(ALT_PORT, HOST, () => {
-        console.log(`NACIONAL BET backend also listening on http://${HOST}:${ALT_PORT} (Container alternate port)`);
+        console.log(`VAMOBET backend also listening on http://${HOST}:${ALT_PORT} (Container alternate port)`);
       });
       altServer.on("error", (err) => {
         console.warn(`[Alt Server Notice on port ${ALT_PORT}]:`, err?.message || err);

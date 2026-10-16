@@ -1,1 +1,0 @@
-Logo ZERO BET atualizada em cabeçalho, menu, login, carregamento, painel admin e favicon. Fundo preto e elementos de destaque rosa #f50046. Configuração local PostCSS incluída. Para testar: npm install e npm run dev. Acesse http://localhost:3000.

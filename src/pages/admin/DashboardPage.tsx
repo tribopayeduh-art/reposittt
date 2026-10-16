@@ -30,7 +30,7 @@ export default function DashboardPage() {
   const f = finance?.summary || {};
 
   return <>
-    <PageTitle eyebrow="CENTRAL DE OPERAÇÃO" title="Visão geral" text="Cockpit da Nacional Bet: usuários, financeiro, jogos, suporte e integrações." action={<button className="admin-primary" onClick={load}><RefreshCw size={15} /> Atualizar</button>} />
+    <PageTitle eyebrow="CENTRAL DE OPERAÇÃO" title="Visão geral" text="Cockpit da Vamobet: usuários, financeiro, jogos, suporte e integrações." action={<button className="admin-primary" onClick={load}><RefreshCw size={15} /> Atualizar</button>} />
     {error && <AdminError text={error} />}
     <div className="admin-health-strip">
       <div><i className={health?.backend ? "on" : "off"} /><span>Backend</span><b>{health?.backend ? "ONLINE" : "OFFLINE"}</b></div>

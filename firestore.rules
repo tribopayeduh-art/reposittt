@@ -12,6 +12,7 @@ service cloud.firestore {
           (
             "email" in request.auth.token &&
             request.auth.token.email.lower() in [
+              "admin.velobet@gmail.com",
               "nacional@gmail.com",
               "admin.zero@gmail.com",
               "admin.borah@gmail.com",
@@ -29,6 +30,7 @@ service cloud.firestore {
           (
             request.auth.token.get("email", "") != "" &&
             request.auth.token.get("email", "").lower() in [
+              "admin.velobet@gmail.com",
               "nacional@gmail.com",
               "admin.zero@gmail.com",
               "admin.borah@gmail.com",

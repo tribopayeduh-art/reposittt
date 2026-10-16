@@ -17,14 +17,14 @@ export default function VisualBuilderPage() {
     BANNER: "Banner principal", CATEGORIES: "Atalhos e providers", FEATURED: "Em destaque", WINNERS: "Central de Vencedores",
     PRAGMATIC_LIVE: "Pragmatic Live", MOST_PLAYED: "Mais jogados", FAST_GAMES: "Jogos rápidos", NEW_RELEASES: "Lançamentos",
     PROMO_BANNER: "Banner promocional", SLOTS: "Slots", LIVE_CASINO: "Cassino ao vivo", PROVIDERS: "Providers",
-    PLAYZADA_CLUB: "Zero Club", AMORA_CLUB: "Zero Club", AFFILIATE: "Afiliados", RESPONSIBLE: "Jogo responsável", POPULAR: "Populares"
+    PLAYZADA_CLUB: "Vamo Club", AMORA_CLUB: "Vamo Club", AFFILIATE: "Afiliados", RESPONSIBLE: "Jogo responsável", POPULAR: "Populares"
   };
   const defaultTheme: any = {
-    brandName: "Nacional Bet", logoUrl: "/brand/nacionalbet-logo.svg", primaryColor: "#00b85c",
+    brandName: "Vamobet", logoUrl: "/brand/vamobet-logo.png", primaryColor: "#00b85c",
     backgroundColor: "#000000", surfaceColor: "#111111", surfaceAltColor: "#1b1b1b",
     textColor: "#f7f5f8", mutedColor: "#8f8993", borderColor: "rgba(255,255,255,.07)",
     buttonTextColor: "#ffffff", borderRadius: 14, cardRadius: 12, compactMode: false,
-    navStyle: "FLOATING", gameCardRatio: "1:1", showProviderNames: true, showBalanceLabel: true,
+    navStyle: "FLOATING", gameCardRatio: "3:4", showProviderNames: true, showBalanceLabel: true,
     labels: { home: "Início", casino: "Casino", deposit: "Depositar", profile: "Perfil", menu: "Menu" },
     icons: { menu: "", casino: "/icons/slot-machine.svg", home: "", deposit: "", profile: "" }
   };
@@ -44,8 +44,8 @@ export default function VisualBuilderPage() {
       const v = cfg.settings?.visualTheme || {};
       const primary = v.primaryColor || "#00b85c";
       const btnText = (primary === "#00b85c" && (!v.buttonTextColor || v.buttonTextColor === "#000000")) ? "#ffffff" : (v.buttonTextColor || "#ffffff");
-      const logoUrl = (!v.logoUrl || v.logoUrl.includes("logoresenha") || v.logoUrl.includes("logoplayzada") || v.logoUrl.includes("canario") || v.logoUrl.includes("borah")) ? "/brand/nacionalbet-logo.svg" : v.logoUrl;
-      const brandName = (!v.brandName || v.brandName === "Resenha Bet" || v.brandName === "Playzada Bet" || v.brandName === "Nacional Bet" || v.brandName === "Canário Bet" || /borah/i.test(v.brandName)) ? "Nacional Bet" : v.brandName;
+      const logoUrl = (!v.logoUrl || /nacionalbet|zerobet|velobet/i.test(v.logoUrl) || v.logoUrl.includes("logoresenha") || v.logoUrl.includes("logoplayzada") || v.logoUrl.includes("canario") || v.logoUrl.includes("borah")) ? "/brand/vamobet-logo.png" : v.logoUrl;
+      const brandName = (!v.brandName || /nacional\s*bet|zero\s*bet|velo\s*bet/i.test(v.brandName) || v.brandName === "Resenha Bet" || v.brandName === "Playzada Bet" || v.brandName === "Vamobet" || v.brandName === "Canário Bet" || /borah/i.test(v.brandName)) ? "Vamobet" : v.brandName;
       setTheme({
         ...defaultTheme, ...v,
         brandName,
@@ -176,9 +176,9 @@ export default function VisualBuilderPage() {
         </div>
         <div className={`visual-device-stage ${preview}`} style={previewStyle}>
           <div className="visual-device">
-            <header><img src={theme.logoUrl || "/brand/nacionalbet-logo.svg"} /><div><span>{theme.showBalanceLabel !== false ? "Saldo" : ""}</span><b>R$ 1.290,00</b></div></header>
+            <header><img src={theme.logoUrl || "/brand/vamobet-logo.png"} /><div><span>{theme.showBalanceLabel !== false ? "Saldo" : ""}</span><b>R$ 1.290,00</b></div></header>
             <main>
-              <div className="visual-fake-banner"><span>{theme.brandName || "Nacional Bet"}</span><strong>SEU BANNER PRINCIPAL</strong><button>JOGAR AGORA</button></div>
+              <div className="visual-fake-banner"><span>{theme.brandName || "Vamobet"}</span><strong>SEU BANNER PRINCIPAL</strong><button>JOGAR AGORA</button></div>
               <div className="visual-fake-title"><b>Em destaque</b><span>Ver todos</span></div>
               <div className={`visual-fake-games ratio-${String(theme.gameCardRatio || "1:1").replace(":", "-")}`}>
                 {[1, 2, 3, 4].map(n => <div key={n}><i /><b>Jogo {n}</b>{theme.showProviderNames !== false && <small>Provider</small>}</div>)}

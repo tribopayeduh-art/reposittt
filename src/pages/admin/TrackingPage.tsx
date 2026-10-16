@@ -89,7 +89,7 @@ export default function TrackingPage() {
           window.fbq("track", "Purchase", {
             value: 50.0,
             currency: "BRL",
-            content_name: "Teste de Venda (Depósito Nacional Bet)",
+            content_name: "Teste de Venda (Depósito Vamobet)",
             content_type: "product",
           });
         } else if (eventName === "InitiateCheckout") {

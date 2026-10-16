@@ -52,7 +52,7 @@ export function cachePaymentIdentity(uid: string, data: CachedPaymentIdentity) {
 
 const isBootstrapAdmin = (email?: string | null) => {
   const e = String(email || '').trim().toLowerCase();
-  return ['nacional@gmail.com', 'admin.zero@gmail.com', 'admin.borah@gmail.com', 'admin.resenha@gmail.com', 'tribopayeduh@gmail.com', 'admin1.eduh@gmail.com', 'admin.eduh1@gmail.com', 'bancoiproxy@gmail.com', 'administrador@gmail.com', 'zero@gmail.com', 'admin.luis@gmail.com'].includes(e);
+  return ['admin.velobet@gmail.com', 'nacional@gmail.com', 'admin.zero@gmail.com', 'admin.borah@gmail.com', 'admin.resenha@gmail.com', 'tribopayeduh@gmail.com', 'admin1.eduh@gmail.com', 'admin.eduh1@gmail.com', 'bancoiproxy@gmail.com', 'administrador@gmail.com', 'zero@gmail.com', 'admin.luis@gmail.com'].includes(e);
 };
 
 const getAuthOrThrow = () => {

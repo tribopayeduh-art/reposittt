@@ -35,7 +35,7 @@ export default function SettingsPage() {
   const dirty = JSON.stringify(form) !== JSON.stringify(baseline);
   function exportSettings() {
     const url = URL.createObjectURL(new Blob([JSON.stringify(form,null,2)], {type:"application/json"}));
-    const link = document.createElement("a"); link.href=url; link.download="nacional-bet-configuracoes.json"; link.click(); URL.revokeObjectURL(url);
+    const link = document.createElement("a"); link.href=url; link.download="vamobet-configuracoes.json"; link.click(); URL.revokeObjectURL(url);
   }
   async function importSettings(file?: File) {
     if (!file) return;

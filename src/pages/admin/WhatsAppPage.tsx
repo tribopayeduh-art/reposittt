@@ -10,7 +10,7 @@ export default function WhatsAppPage() {
   const [diag, setDiag] = useState<any>(null);
   const [items, setItems] = useState<any[]>([]);
   const [form, setForm] = useState<any>({ title: "", text: "", audience: "OPTED_IN", delayMs: 1500 });
-  const [test, setTest] = useState({ phone: "", text: "Olá! Esta é uma mensagem de teste da Canário Bet." });
+  const [test, setTest] = useState({ phone: "", text: "Olá! Esta é uma mensagem de teste da Vamobet." });
   const [msg, setMsg] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -81,7 +81,7 @@ export default function WhatsAppPage() {
       <div className="wa-connection-copy">
         <span>STATUS DA SESSÃO</span>
         <h3>{netlifyMode ? "Baileys requer backend persistente" : status.connected ? "WhatsApp conectado" : qrReady ? "QR Code pronto para escanear" : status.status === "ERROR" ? "Falha ao iniciar Baileys" : status.status === "LOGGED_OUT" ? "Sessão desconectada pelo WhatsApp" : "Preparando conexão"}</h3>
-        <p>{netlifyMode ? "A Canário Bet está rodando em Netlify Functions. O restante do painel funciona normalmente, mas a sessão WebSocket do Baileys precisa ficar em um servidor/VPS permanente." : status.connected ? "A sessão está pronta para mensagens de teste e campanhas." : qrReady ? "Abra o WhatsApp no celular → Dispositivos conectados → Conectar dispositivo." : status.lastError || "Clique em Conectar ou Gerar novo QR. O QR pode levar alguns segundos."}</p>
+        <p>{netlifyMode ? "A Vamobet está rodando em Netlify Functions. O restante do painel funciona normalmente, mas a sessão WebSocket do Baileys precisa ficar em um servidor/VPS permanente." : status.connected ? "A sessão está pronta para mensagens de teste e campanhas." : qrReady ? "Abra o WhatsApp no celular → Dispositivos conectados → Conectar dispositivo." : status.lastError || "Clique em Conectar ou Gerar novo QR. O QR pode levar alguns segundos."}</p>
       </div>
       <Status value={status.connected ? "ONLINE" : qrReady ? "QR_READY" : status.status || "DISCONNECTED"} />
     </div>

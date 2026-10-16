@@ -13,8 +13,8 @@ export const PLATFORM_DEFAULTS = {
     "measurementId": ""
   },
   "admin": {
-    "email": "nacional@gmail.com",
-    "emails": ["nacional@gmail.com", "admin.zero@gmail.com", "admin.borah@gmail.com", "admin.resenha@gmail.com", "admin1.eduh@gmail.com", "admin.eduh1@gmail.com", "bancoiproxy@gmail.com", "administrador@gmail.com", "tribopayeduh@gmail.com", "zero@gmail.com", "admin.luis@gmail.com"],
+    "email": "admin.velobet@gmail.com",
+    "emails": ["admin.velobet@gmail.com", "nacional@gmail.com", "admin.zero@gmail.com", "admin.borah@gmail.com", "admin.resenha@gmail.com", "admin1.eduh@gmail.com", "admin.eduh1@gmail.com", "bancoiproxy@gmail.com", "administrador@gmail.com", "tribopayeduh@gmail.com", "zero@gmail.com", "admin.luis@gmail.com"],
     "uid": ""
   },
   "igamewin": {

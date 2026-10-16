@@ -122,18 +122,18 @@ export default function AuthPage() {
     <main className={`zb-auth ${isRegister ? 'zb-auth-register' : ''}`}>
       <div className="zb-auth-shell">
         <header className="zb-auth-hero">
-          <img className="zb-auth-art" src={isRegister ? "/banners/auth-register-tiger.png?v=nacional-original-2" : "/banners/auth-welcome-tiger.png?v=nacional-original-2"} alt="" fetchPriority="high" />
+          <img className="zb-auth-art" src={isRegister ? "/banners/auth-register-tiger.png?v=vamobet-20261017" : "/banners/auth-welcome-tiger.png?v=vamobet-20261017"} alt="" fetchPriority="high" />
           <div className="zb-auth-hero-shade" />
-          <div className="zb-auth-brand"><img className="zb-auth-logo" src="/brand/nacionalbet-logo.svg" alt="Nacional Bet"/><small>18+</small></div>
+          <div className="zb-auth-brand"><img className="zb-auth-logo" src="/brand/vamobet-logo.png" alt="Vamobet"/><small>18+</small></div>
           <div className="zb-auth-welcome">
-            <h1>{isForgot ? <>RECUPERE<br/><strong>SEU ACESSO.</strong></> : isRegister ? <>BEM-VINDO À<br/><strong>NACIONAL BET!</strong></> : <>BEM-VINDO<br/><strong>NOVAMENTE!</strong></>}</h1>
+            <h1>{isForgot ? <>RECUPERE<br/><strong>SEU ACESSO.</strong></> : isRegister ? <>BEM-VINDO À<br/><strong>VAMOBET!</strong></> : <>BEM-VINDO<br/><strong>NOVAMENTE!</strong></>}</h1>
             <p>{isForgot ? 'Estamos aqui para ajudar.' : isRegister ? 'Sua experiência começa aqui.' : 'Bom ter você de volta.'}</p>
           </div>
         </header>
         <section className="zb-auth-panel" aria-labelledby="zb-auth-title">
           {isForgot && <button className="zb-auth-back" type="button" onClick={() => changeMode('login')}><ArrowLeft size={16}/> Voltar para o login</button>}
           <h2 id="zb-auth-title">{isForgot ? 'Recupere sua senha' : isRegister ? 'Crie sua conta' : 'Acesse sua conta'}</h2>
-          <p className="zb-auth-description">{isForgot ? 'Enviaremos as instruções para seu e-mail.' : isRegister ? 'Comece em poucos passos.' : 'Entre na sua conta Nacional Bet.'}</p>
+          <p className="zb-auth-description">{isForgot ? 'Enviaremos as instruções para seu e-mail.' : isRegister ? 'Comece em poucos passos.' : 'Entre na sua conta Vamobet.'}</p>
           <form onSubmit={submit} className="zb-auth-form">
             {isRegister && <label className="zb-auth-field"><span>Nome completo</span><div><UserRound size={19}/><input autoComplete="name" value={name} onChange={e=>setName(e.target.value)} placeholder="Digite seu nome completo" required minLength={2}/></div></label>}
             <label className="zb-auth-field"><span>E-mail</span><div><Mail size={19}/><input type="email" autoComplete="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Digite seu e-mail" required/></div></label>

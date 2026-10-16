@@ -2936,13 +2936,13 @@
 
 
 
-/* Nacional Bet • Wine admin */
+/* Vamobet • Wine admin */
 .admin-shell,.admin-main{background:#ffffff!important}
 .admin-sidebar,.admin-topbar{background:#ffffff!important;border-color:rgba(157,225,182,.13)!important}
 .admin-card,.admin-metric{background:linear-gradient(135deg,#ffffff,#ffffff)!important;border-color:rgba(157,225,182,.13)!important}
 .admin-sidebar-logo{object-fit:contain}
 
-/* NACIONAL BET SaaS: administrative theme */
+/* VAMOBET SaaS: administrative theme */
 .admin-shell{color-scheme:light;background:#f7f8fb!important;color:#17212f!important;font-family:Inter,system-ui,sans-serif;--amora-bg:#f7f8fb;--amora-surface:#fff;--amora-text:#17212f;--amora-muted:#667085;--amora-border:#e5e9f0;--amora-primary:#344054;--pink:#344054}
 .admin-sidebar,.admin-sidebar-v11{background:#fff!important;border-right:1px solid #e5e9f0!important;width:264px;padding:18px 14px}
 .admin-main{margin-left:264px;width:calc(100% - 264px);background:#f7f8fb!important}
@@ -3122,3 +3122,6 @@
 .players-workspace button:focus-visible,.players-workspace input:focus-visible,.players-workspace select:focus-visible{outline:2px solid #94a3b8!important;outline-offset:3px}
 @media(max-width:1100px){.players-workspace .admin-page-title{flex-direction:column}.players-workspace .admin-users-desktop table{min-width:1000px}.players-workspace .filter-bar-footer{align-items:flex-start;flex-wrap:wrap}}
 @media(max-width:768px){.players-workspace{gap:16px}.players-workspace .admin-page-title h1{font-size:23px}.players-workspace .user-view-tabs{max-width:100%;overflow-x:auto}.players-workspace .user-view-tab{font-size:11px!important;min-height:40px}.players-workspace .user-kpi-card{padding:14px!important}.players-workspace .user-kpi-card strong{font-size:23px!important}.players-workspace .user-kpi-card .kpi-head{margin-bottom:10px}.players-workspace .user-kpi-card .kpi-head span{font-size:11px!important}.players-workspace .filter-bar-container{padding:14px!important}.players-workspace .players-search-row{flex-wrap:wrap}.players-workspace .players-search-input{flex-basis:100%}.players-workspace .players-search-actions{width:100%}.players-workspace .players-search-actions button:first-child{flex:1}.players-workspace .filter-pills-row{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}.players-workspace .filter-pill{flex-shrink:0;min-height:38px}.players-workspace .filter-bar-footer>div:last-child{width:100%}.players-workspace .sort-select-wrapper{flex-wrap:wrap}.players-workspace .filter-bar-footer select{min-height:40px}.players-workspace .admin-user-mobile-top>div:first-child{display:flex;align-items:center;gap:10px;min-width:0}.players-workspace .admin-pagination{line-height:1.6}.players-workspace .admin-status{max-width:100%;white-space:normal}}
+
+/* Vamobet admin brand on the light dashboard. */
+.admin-saas-brand .vamobet-admin-logo{width:156px;height:54px;padding:3px 9px;border-radius:10px;background:#08190f;object-fit:contain}

@@ -1,6 +1,0 @@
-PASS - Admin modules
-PASS - Backend KYC
-PASS - Backend risk
-PASS - Backend affiliates
-PASS - Backend reports
-PASS - Backend staff

@@ -231,7 +231,7 @@ img{max-width:100%;-webkit-user-drag:none;user-select:none}.app-shell{min-height
   justify-content:space-between;
   background:
     linear-gradient(90deg,rgba(0,0,0,.2),rgba(0,0,0,.45)),
-    url('/banners/desafio-tiger-desktop.png?v=nacional-original-2') center/cover no-repeat;
+    url('/banners/desafio-tiger-desktop.png?v=vamobet-20261017') center/cover no-repeat;
 }
 .auth-showcase-overlay{
   position:absolute;
@@ -3043,7 +3043,7 @@ html[data-amora-compact="true"] .game-card{padding:5px!important}
 
 
 
-/* Nacional Bet • Wine identity */
+/* Vamobet • Wine identity */
 :root { --bg:#000000; --panel:#111111; --panel2:#1b1b1b; --pink:#00b85c; --pink2:#36e68b; --muted:#9cb7a8; --line:rgba(157,225,182,.13); }
 body { background:#000000; }
 .topbar,.desktop-sidebar,.bottom-nav { border-color:rgba(157,225,182,.15); }
@@ -3055,11 +3055,11 @@ body { background:#000000; }
 button:focus-visible,a:focus-visible { outline:2px solid #36e68b; outline-offset:3px; }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}button{transition:none!important}}
 
-/* NACIONAL BET: black base, pink accents. */
+/* VAMOBET: black base, pink accents. */
 html,body,.app-shell,.loading-screen{background:#000!important}
 .brand-logo-image,.auth-brand-logo{filter:none!important;object-fit:contain}
 
-/* NACIONAL BET home motion */
+/* VAMOBET home motion */
 .zero-home .section-block,.zero-home .home-banner-stack,.zero-home .home-info-card{animation:zero-enter .55s cubic-bezier(.22,.7,.3,1) both}
 .zero-home>:nth-child(2){animation-delay:.06s}.zero-home>:nth-child(3){animation-delay:.12s}.zero-home>:nth-child(4){animation-delay:.18s}
 @keyframes zero-enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
@@ -3190,7 +3190,7 @@ button.launch-promotion-art .launch-promotion-fallback{line-height:1.3}
 @media(max-width:640px){.account-page{padding:20px 14px 30px}.account-heading{margin-bottom:20px}.account-heading h1{font-size:24px}.account-heading p{font-size:12px}.account-layout{grid-template-columns:minmax(0,1fr);gap:24px}.account-identity{padding:22px 18px}.account-balance{padding:20px}.account-balance>strong{font-size:32px}.account-content{gap:24px}.account-setting{min-height:76px;padding:14px 12px;gap:10px}.account-setting-label strong{font-size:13px}.account-setting-label small{font-size:11px}.account-referral{padding:18px}.account-link-field button{padding:0 12px}.account-referral-stats{gap:8px}.account-referral-stats strong{font-size:14px}.account-data-modal .my-data-row{flex-wrap:wrap}.account-data-modal .my-data-row>div{max-width:100%}}
 @media(prefers-reduced-motion:reduce){.account-setting{transition:none}}
 
-/* Nacional Bet identity */
+/* Vamobet identity */
 :root{--primary:#00b85c;--pink:#00b85c;--pink2:#36e68b;--amora-primary:#00b85c;--line:rgba(157,225,182,.13)}
 .primary-button,.auth-primary,.deposit-submit,.zb-auth-submit{color:#04170e!important}
 .topbar,.bottom-nav{background:rgba(8,19,13,.97)}
