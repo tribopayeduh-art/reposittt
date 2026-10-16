@@ -231,7 +231,7 @@ img{max-width:100%;-webkit-user-drag:none;user-select:none}.app-shell{min-height
   justify-content:space-between;
   background:
     linear-gradient(90deg,rgba(0,0,0,.2),rgba(0,0,0,.45)),
-    url('/banners/desafio-tiger-desktop.png?v=vamobet-20261017') center/cover no-repeat;
+    url('/banners/vamobet-20261017-v2/desafio-tiger-desktop.png') center/cover no-repeat;
 }
 .auth-showcase-overlay{
   position:absolute;

@@ -1,3 +1,4 @@
+import { markArtwork, normalizeArtworkSettings } from "../../../shared/bannerIdentity.mjs";
 import { useState, useEffect, useMemo } from "react";
 import {
   ShieldCheck,
@@ -74,7 +75,8 @@ export default function SettingsPage() {
     setLoading(true);
     try {
       const d: any = await adminApi("/api/admin/configuration");
-      setForm(d.settings || {}); setBaseline(d.settings || {});
+      const settings=normalizeArtworkSettings(d.settings || {});
+      setForm(settings); setBaseline(settings);
     } catch (e: any) {
       setMsg(e.message);
     } finally {
@@ -84,7 +86,7 @@ export default function SettingsPage() {
 
   useEffect(() => { load(); }, []);
 
-  const set = (k: string, v: any) => setForm((x: any) => ({ ...x, [k]: v }));
+  const set = (k: string, v: any) => setForm((x: any) => (["homeBannerImage","popupImage"].includes(k) ? markArtwork(x,k,v) : { ...x, [k]: v }));
   const feeRules = Array.isArray(form.withdrawFeeRules) ? form.withdrawFeeRules : [];
 
   function setFeeRule(index: number, patch: any) {

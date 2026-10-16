@@ -28,7 +28,8 @@
     "db:audit": "node scripts/audit-database.mjs",
     "firebase:project-check": "node scripts/check-firebase-project.mjs",
     "firebase:bootstrap": "node scripts/bootstrap-new-firebase.mjs",
-    "cloudrun:check": "node scripts/cloudrun-check.mjs"
+    "cloudrun:check": "node scripts/cloudrun-check.mjs",
+    "banners:test": "node --test scripts/test-banner-identity.mjs"
   },
   "dependencies": {
     "@hapi/boom": "^10.0.1",

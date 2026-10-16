@@ -1,3 +1,4 @@
+import { ARTWORK_VERSION, normalizeBanner, normalizeArtworkSettings } from "../shared/bannerIdentity.mjs";
 import { getBrandedGameCover } from "./nacional-artwork.mjs";
 import {createClient as createSupabaseClient} from '@supabase/supabase-js';
 import {DEFAULT_PLATFORM_SETTINGS} from './public-settings-defaults.mjs';
@@ -5307,6 +5308,7 @@ async function getPlatformSettings(idToken = null, bypassCache = false) {
   if (merged.siteName === "Resenha Bet" || merged.siteName === "Playzada Bet" || merged.siteName === "Vamobet" || merged.siteName === "Canário Bet" || /borah/i.test(merged.siteName)) {
     merged.siteName = "Vamobet";
   }
+  Object.assign(merged, normalizeArtworkSettings(merged));
   platformSettingsCache = { data: merged, expiresAt: now + 15000 };
   return merged;
 }
@@ -5317,7 +5319,7 @@ app.patch("/api/admin/configuration",requireAdmin,async(req,res)=>{
   try{
     const allowed=[
       "siteName","maintenance","minDeposit","maxDeposit","minWithdraw","maxWithdraw",
-      "withdrawKycRequired","withdrawPixRequired","popupEnabled","popupImage","popupTarget",
+      "artworkBrandVersion","artworkSources","withdrawKycRequired","withdrawPixRequired","popupEnabled","popupImage","popupTarget",
       "popupFrequency","firstDepositBonusPercent","homeBannerEnabled","homeBannerImage",
       "supportUrl","termsUrl","privacyUrl","responsibleGamingUrl",
       "languageBonusEnabled","languageBonusAmountBRL","languageBonusRussiaDisplay",
@@ -6345,6 +6347,7 @@ app.get("/api/admin/kyc-requests",requireAdmin,async(_req,res)=>{try{const docs=
  * ======================================================= */
 
 const BANNER_ALLOWED = [
+  "artworkBrandVersion","artworkSources",
   "name","title","subtitle","status","active","placement","template",
   "desktopImage","mobileImage","desktopWidth","desktopHeight","mobileWidth","mobileHeight",
   "sizePreset","objectFit","objectPosition","borderRadius","overlayOpacity",
@@ -6440,6 +6443,7 @@ app.get("/api/banner-campaigns", async (req,res)=>{
       items=[];
     }
 
+    items=items.map(normalizeBanner).filter(Boolean);
     if(placement)items=items.filter(x=>String(x.placement||"")===placement);
     items.sort((a,b)=>
       (Number(b.priority||0)-Number(a.priority||0)) ||
@@ -9387,10 +9391,10 @@ app.post("/api/igamewin/callback", async (req, res) => {
 if (!IS_NETLIFY) {
   // Direct route for link preview banner
   app.get("/previwslinks.png", (req, res) => {
-    const publicPath = path.resolve(process.cwd(), "public", "banners", "bannerborah1.png");
+    const publicPath = path.resolve(process.cwd(), "public", "banners", ARTWORK_VERSION, "bannerborah1.png");
     if (fs.existsSync(publicPath)) {
       res.setHeader("Content-Type", "image/png");
-      res.setHeader("Cache-Control", "public, max-age=86400");
+      res.setHeader("Cache-Control", "no-cache");
       return res.sendFile(publicPath);
     }
     res.status(404).send("Not found");
@@ -9408,7 +9412,7 @@ if (!IS_NETLIFY) {
       const host = req.get("host") || "borah.bet";
       const origin = `${proto}://${host}`;
       const targetUrl = `${origin}${req.originalUrl || ""}`;
-      const imageUrl = `${origin}/banners/bannerborah1.png`;
+      const imageUrl = `${origin}/banners/vamobet-20261017-v2/bannerborah1.png`;
 
       const html = `<!doctype html>
 <html lang="pt-BR">
@@ -9461,7 +9465,7 @@ if (!IS_NETLIFY) {
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
+    app.use(express.static(distPath, { setHeaders(res,file) { if(file.endsWith(".html"))res.setHeader("Cache-Control","no-cache"); } }));
     app.use((req, res, next) => {
       if (req.method === "GET" && !req.path.startsWith("/api/")) {
         return res.sendFile(path.join(distPath, "index.html"));

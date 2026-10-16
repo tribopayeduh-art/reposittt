@@ -1,3 +1,4 @@
+import { markArtwork, normalizeBanner } from "../../../shared/bannerIdentity.mjs";
 import { useState, useEffect } from "react";
 import { Image, Eye, Activity, Sparkles } from "lucide-react";
 import { adminApi } from "../../lib/adminApi";
@@ -24,9 +25,9 @@ export default function PromotionsPage() {
   const [busy, setBusy] = useState(false);
   const [filter, setFilter] = useState("ALL");
 
-  const load = () => adminApi<any>("/api/admin/banner-campaigns").then(d => setItems(d.banners || [])).catch(e => setMessage(e?.message || ""));
+  const load = () => adminApi<any>("/api/admin/banner-campaigns").then(d => setItems((d.banners || []).map((x:any) => normalizeBanner(x) || {...x,desktopImage:"",mobileImage:"",imageUrl:"",legacyArtwork:true}))).catch(e => setMessage(e?.message || ""));
   useEffect(() => { void load(); }, []);
-  const set = (k: string, v: any) => setForm((x: any) => ({ ...x, [k]: v }));
+  const set = (k: string, v: any) => setForm((x: any) => (["desktopImage","mobileImage"].includes(k) ? markArtwork(x,k,v) : { ...x, [k]: v }));
   const nested = (group: string, key: string, v: any) => setForm((x: any) => ({ ...x, [group]: { ...(x[group] || {}), [key]: v } }));
 
   function preset(value: string) {
@@ -52,8 +53,7 @@ export default function PromotionsPage() {
       } catch { }
       const url = await uploadAdminAsset(file);
       setForm((x: any) => ({
-        ...x,
-        [kind]: url,
+        ...markArtwork(x,kind,url),
         ...(kind === "desktopImage" && dimensions.width ? { desktopWidth: dimensions.width, desktopHeight: dimensions.height } : {}),
         ...(kind === "mobileImage" && dimensions.width ? { mobileWidth: dimensions.width, mobileHeight: dimensions.height } : {})
       }));
@@ -65,6 +65,7 @@ export default function PromotionsPage() {
   async function save() {
     setBusy(true); setMessage("");
     try {
+      if (!form.desktopImage && !form.mobileImage) throw new Error("Selecione uma imagem da Vamobet antes de salvar a campanha.");
       const method = editing ? "PATCH" : "POST";
       const path = editing ? `/api/admin/banner-campaigns/${editing}` : "/api/admin/banner-campaigns";
       await adminApi(path, { method, body: JSON.stringify(form) });
@@ -86,7 +87,7 @@ export default function PromotionsPage() {
   const ctr = impressions ? clicks / impressions * 100 : 0;
 
   return <>
-    <PageTitle eyebrow="CAMPAIGN BUILDER" title="Banners & Campanhas" text="Controle completo de imagens, tamanhos, posições, segmentação, agendamento, ações, frequência e métricas." action={<button className="admin-primary" onClick={() => { setEditing(null); setForm(blank); setTab("CONTENT"); }}>+ Novo banner</button>} />
+    <PageTitle eyebrow="CAMPAIGN BUILDER" title="Banners & Campanhas" text="Artes Vamobet. Campanhas antigas sem imagem identificada ficam ocultas no site até receberem uma nova arte." action={<button className="admin-primary" onClick={() => { setEditing(null); setForm(blank); setTab("CONTENT"); }}>+ Novo banner</button>} />
     <div className="banner-kpis"><Metric icon={Image} label="Campanhas" value={items.length} hint={`${items.filter(x => x.active).length} ativas`} /><Metric icon={Eye} label="Visualizações" value={impressions.toLocaleString("pt-BR")} hint="Impressões registradas" /><Metric icon={Activity} label="Cliques" value={clicks.toLocaleString("pt-BR")} hint={`CTR ${ctr.toFixed(2)}%`} /><Metric icon={Sparkles} label="Agendadas" value={items.filter(x => x.status === "SCHEDULED").length} hint="Campanhas futuras" /></div>
 
     <div className="banner-manager-layout">
@@ -143,6 +144,6 @@ export default function PromotionsPage() {
     </div>
 
     <div className="banner-list-head"><div><span>CAMPANHAS</span><h3>Gerenciar banners</h3></div><div className="admin-filter-row">{["ALL", "ACTIVE", "PAUSED", "DRAFT", "SCHEDULED", "HOME_TOP", "POPUP_HOME"].map(x => <button key={x} className={filter === x ? "active" : ""} onClick={() => setFilter(x)}>{({CONTENT:"Imagens e conteúdo",DESIGN:"Aparência",RULES:"Público e horário",ACTION:"Ao clicar",PREVIEW:"Prévia"})[x]}</button>)}</div></div>
-    <div className="banner-campaign-grid">{visible.map(x => { const imp = Number(x.metrics?.impressions || 0), clk = Number(x.metrics?.clicks || 0); return <article className="banner-campaign-card" key={x.id}><div className="banner-card-image">{x.desktopImage ? <img src={x.desktopImage} /> : <Image />}<Status value={x.active ? "ACTIVE" : x.status || "PAUSED"} /></div><div className="banner-card-body"><div><span>{x.placement}</span><h4>{x.name || x.title}</h4><p>{x.template} · {x.sizePreset}</p></div><div className="banner-card-stats"><div><span>Views</span><b>{imp}</b></div><div><span>Cliques</span><b>{clk}</b></div><div><span>CTR</span><b>{imp ? (clk / imp * 100).toFixed(1) : "0"}%</b></div></div><div className="banner-card-actions"><button onClick={() => edit(x)}>Editar</button><button onClick={() => duplicate(x.id)}>Duplicar</button><button onClick={() => toggle(x)}>{x.active ? "Pausar" : "Ativar"}</button><button onClick={() => remove(x.id)}>Excluir</button></div></div></article>; })}</div>
+    <div className="banner-campaign-grid">{visible.map(x => { const imp = Number(x.metrics?.impressions || 0), clk = Number(x.metrics?.clicks || 0); return <article className="banner-campaign-card" key={x.id}><div className="banner-card-image">{x.desktopImage ? <img src={x.desktopImage} /> : <Image />}<Status value={x.active ? "ACTIVE" : x.status || "PAUSED"} /></div><div className="banner-card-body"><div><span>{x.placement}</span><h4>{x.name || x.title}</h4><p>{x.legacyArtwork ? "Arte antiga oculta — selecione uma imagem Vamobet" : `${x.template} · ${x.sizePreset}`}</p></div><div className="banner-card-stats"><div><span>Views</span><b>{imp}</b></div><div><span>Cliques</span><b>{clk}</b></div><div><span>CTR</span><b>{imp ? (clk / imp * 100).toFixed(1) : "0"}%</b></div></div><div className="banner-card-actions"><button onClick={() => edit(x)}>Editar</button><button onClick={() => duplicate(x.id)}>Duplicar</button><button onClick={() => toggle(x)}>{x.active ? "Pausar" : "Ativar"}</button><button onClick={() => remove(x.id)}>Excluir</button></div></div></article>; })}</div>
   </>;
 }

@@ -122,7 +122,7 @@ export default function AuthPage() {
     <main className={`zb-auth ${isRegister ? 'zb-auth-register' : ''}`}>
       <div className="zb-auth-shell">
         <header className="zb-auth-hero">
-          <img className="zb-auth-art" src={isRegister ? "/banners/auth-register-tiger.png?v=vamobet-20261017" : "/banners/auth-welcome-tiger.png?v=vamobet-20261017"} alt="" fetchPriority="high" />
+          <img className="zb-auth-art" src={isRegister ? "/banners/vamobet-20261017-v2/auth-register-tiger.png" : "/banners/vamobet-20261017-v2/auth-welcome-tiger.png"} alt="" fetchPriority="high" />
           <div className="zb-auth-hero-shade" />
           <div className="zb-auth-brand"><img className="zb-auth-logo" src="/brand/vamobet-logo.png" alt="Vamobet"/><small>18+</small></div>
           <div className="zb-auth-welcome">

@@ -1,3 +1,4 @@
+import { markArtwork, brandedRecordImage, brandedText } from "../../../shared/bannerIdentity.mjs";
 import {supabaseEnabled} from '../../lib/supabase';
 import {uploadAdminAsset} from '../../lib/adminAssets';
 import { useState, useEffect } from "react";
@@ -15,14 +16,14 @@ export default function BonusesPage() {
   });
   const [msg, setMsg] = useState("");
 
-  const load = () => adminApi<any>("/api/admin/bonuses").then(d => setItems(d.bonuses || [])).catch(e => setMsg(e?.message || ""));
+  const load = () => adminApi<any>("/api/admin/bonuses").then(d => setItems((d.bonuses || []).map((x:any)=>({...x,title:brandedText(x.title),image:brandedRecordImage(x,'image')})))).catch(e => setMsg(e?.message || ""));
   useEffect(() => { void load(); }, []);
 
   async function upload(file?: File) {
     if (!file) return;
     if(supabaseEnabled){
       setMsg('Enviando imagem...');
-      try{const image=await uploadAdminAsset(file);setForm((x:any)=>({...x,image}));setMsg('Imagem enviada. Salve o bônus para associá-la.');}catch(e:any){setMsg(e.message);}
+      try{const image=await uploadAdminAsset(file);setForm((x:any)=>markArtwork(x,'image',image));setMsg('Imagem enviada. Salve o bônus para associá-la.');}catch(e:any){setMsg(e.message);}
       return;
     }
     if(!storage)return;
@@ -32,7 +33,7 @@ export default function BonusesPage() {
       const r = storageRef(storage, `bonuses/${Date.now()}-${safe}`);
       await uploadBytes(r, file, { contentType: file.type });
       const url = await getDownloadURL(r);
-      setForm((x: any) => ({ ...x, image: url })); setMsg("Imagem do bônus salva no Storage.");
+      setForm((x: any) => markArtwork(x,'image',url)); setMsg("Imagem do bônus salva no Storage.");
     } catch (e: any) { setMsg(e.message); }
   }
 
@@ -76,7 +77,7 @@ export default function BonusesPage() {
           <label className="admin-field"><span>Bônus máximo</span><input type="number" value={form.maxBonus} onChange={e => setForm({ ...form, maxBonus: Number(e.target.value) })} /></label>
         </div>
         <label className="admin-field"><span>Rollover</span><input type="number" value={form.rollover} onChange={e => setForm({ ...form, rollover: Number(e.target.value) })} /></label>
-        <label className="admin-field"><span>Banner do bônus</span><div className="banner-upload-row"><input value={form.image || ""} onChange={e => setForm({ ...form, image: e.target.value })} /><label className="banner-upload-btn">UPLOAD<input type="file" accept="image/*" onChange={e => upload(e.target.files?.[0])} /></label></div></label>
+        <label className="admin-field"><span>Banner do bônus</span><div className="banner-upload-row"><input value={form.image || ""} onChange={e => setForm(markArtwork(form,'image',e.target.value))} /><label className="banner-upload-btn">UPLOAD<input type="file" accept="image/*" onChange={e => upload(e.target.files?.[0])} /></label></div></label>
         <div className="admin-form-grid">
           <label className="admin-field"><span>Tamanho</span><select value={form.imageSizePreset} onChange={e => setForm({ ...form, imageSizePreset: e.target.value })}><option>1:1</option><option>4:5</option><option>16:9</option><option>9:16</option></select></label>
           <label className="admin-field"><span>Posição</span><select value={form.placement} onChange={e => setForm({ ...form, placement: e.target.value })}><option>BONUSES_MAIN</option><option>BONUSES_TOP</option><option>HOME_PROMO</option></select></label>

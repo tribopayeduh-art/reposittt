@@ -1,3 +1,4 @@
+import { brandedRecordImage, normalizeBanner, normalizeArtworkSettings } from "../shared/bannerIdentity.mjs";
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import { supabaseEnabled } from './lib/supabase';
 import { providerLogoAssets } from "./lib/providerLogos";
@@ -294,7 +295,7 @@ function App() {
       .then(d => {
         if (d?.settings && typeof d.settings === 'object') {
           if (d.settings.visualTheme) d.settings.visualTheme = applyVisualTheme(d.settings.visualTheme);
-          setSystemSettings((prev: any) => ({ ...d.settings, ...prev }));
+          setSystemSettings((prev: any) => normalizeArtworkSettings({ ...d.settings, ...prev }));
         }
       })
       .catch(() => {});
@@ -302,7 +303,7 @@ function App() {
     const unsubSystem = subscribeSystemSettings(settings => {
       if (settings && typeof settings === 'object') {
         if (settings.visualTheme) settings = {...settings, visualTheme: applyVisualTheme(settings.visualTheme)};
-        setSystemSettings((prev:any) => ({ ...prev, ...settings }));
+        setSystemSettings((prev:any) => normalizeArtworkSettings({ ...prev, ...settings }));
       }
     });
 
@@ -317,7 +318,7 @@ function App() {
       if (value && typeof value === 'object') {
         const next = { ...value };
         if (next.visualTheme) next.visualTheme = applyVisualTheme(next.visualTheme);
-        setSystemSettings((x:any) => ({ ...x, ...next }));
+        setSystemSettings((x:any) => normalizeArtworkSettings({ ...x, ...next }));
       }
     });
 
@@ -1219,28 +1220,17 @@ function runBannerAction(b:BannerCampaign,setTab:(t:Tab)=>void,onGames:()=>void)
   if(type==='PROFILE') return setTab('profile');
   if(type==='URL' && a.url) window.open(a.url,a.newTab===false?'_self':'_blank','noopener,noreferrer');
 }
-function normalizeZeroBanner(b:any){
-  const next={...b};
-  const known=["zerobet-stories-cta.png","zerobet-primeiro-deposito-200-1200.png","zerobet-primeiro-deposito-stories.png","bannerborah1.png", "bannerborah2.png", "bannerdep.png", "popupdeposito001.png", "desafio-tiger-mobile.png", "ca100por500.png", "bonus300-900.png", "deposito-300.png", "desafio-tiger-home-v2.png", "100por500.png", "200por1000.png", "ca200por1000.png", "desafio-tiger-desktop.png"];
-  for(const key of ['desktopImage','mobileImage','imageUrl']){
-    const value=String(next[key]||'');
-    let decoded=value;try{decoded=decodeURIComponent(value)}catch{}
-    const file=decoded.split('?')[0].split('/').pop()||'';
-    if(known.includes(file))next[key]='/banners/'+file+'?v=vamobet-20261017';
-  }
-  for(const key of ['title','name','subtitle','badge']) if(typeof next[key]==='string')next[key]=next[key].replace(/Borah\s*Bet|Can[áa]rio\s*Bet|Amora\s*Bet|Resenha\s*Bet|Playzada\s*Bet|Zero\s*Bet|Nacional\s*Bet|Velo\s*Bet/gi,'Vamobet');
-  return next;
-}
+const normalizeZeroBanner = normalizeBanner;
 
 function useBanners(placement:string,user:User|null,profile:UserProfile|null){
   const [raw,setRaw]=useState<BannerCampaign[]>([]);
-  useEffect(()=>subscribePublicBanners(placement,(rows:any[])=>setRaw(rows.map(normalizeZeroBanner) as BannerCampaign[])),[placement]);
+  useEffect(()=>subscribePublicBanners(placement,(rows:any[])=>setRaw(rows.map(normalizeZeroBanner).filter(Boolean) as BannerCampaign[])),[placement]);
   return raw.filter((b:BannerCampaign)=>targetAllowed(b,user,profile)&&frequencyAllowed(b)).sort((a,b)=>(Number(b.priority||0)-Number(a.priority||0))||(Number(a.sortOrder||0)-Number(b.sortOrder||0)));
 }
 function DynamicBannerSlot({placement,user,profile,setTab,onGames,fallback=null}:{placement:string;user:User|null;profile:UserProfile|null;setTab:(t:Tab)=>void;onGames:()=>void;fallback?:ReactNode}){
   const items=useBanners(placement,user,profile);
   const [index,setIndex]=useState(0);
-  const banner=items[index];
+  const banner=items[index % Math.max(items.length,1)];
   useEffect(()=>{ if(banner){ bannerEvent(banner,'IMPRESSION',user); markFrequency(banner); } },[banner?.id]);
   useEffect(()=>{
     if(items.length<2)return;
@@ -1248,7 +1238,7 @@ function DynamicBannerSlot({placement,user,profile,setTab,onGames,fallback=null}
     const timer=setInterval(()=>setIndex(i=>(i+1)%items.length),ms);
     return()=>clearInterval(timer);
   },[items.length,banner?.autoplayMs]);
-  if(!items.length)return <>{fallback}</>;
+  if(!banner)return <>{fallback}</>;
   const click=()=>{bannerEvent(banner,'CLICK',user);trackMarketingEvent('BannerClick',{banner_id:banner.id,placement:banner.placement});runBannerAction(banner,setTab,onGames)};
   const desktopRatio=`${banner.desktopWidth||1898} / ${banner.desktopHeight||800}`;
   return <section className={`dynamic-banner-slot template-${String(banner.template||'FULL_IMAGE').toLowerCase()}`} style={{['--banner-radius' as any]:`${banner.borderRadius??16}px`,['--banner-ratio' as any]:desktopRatio}}>
@@ -1303,7 +1293,7 @@ function HomeWelcomePopup({ onGames }: { onGames: () => void }) {
       <div className="tiger-popup-card">
         <button className="tiger-popup-close" onClick={close} aria-label="Fechar popup"><X size={20}/></button>
         <button className="tiger-popup-image-button" onClick={participate} aria-label="Participar do Desafio Tiger">
-          <img src="/banners/desafio-tiger-mobile.png?v=vamobet-20261017" alt="Desafio Tiger — últimas horas para participar" width="918" height="1560" decoding="async" />
+          <img src="/banners/vamobet-20261017-v2/desafio-tiger-mobile.png" alt="Desafio Tiger — últimas horas para participar" width="918" height="1560" decoding="async" />
         </button>
         <div className="tiger-popup-actions">
           <button className="primary-button full" onClick={participate}>VER JOGOS <ChevronRight size={16}/></button>
@@ -1338,7 +1328,7 @@ function LaunchPromotionPopup({ onClose, onDeposit }: { onClose: () => void; onD
   return <div className="first-deposit-popup-overlay launch-promotion-overlay" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
     <div className="first-deposit-popup-card launch-promotion-card" role="dialog" aria-modal="true" aria-label="Primeiro depósito: R$ 200 mais R$ 1.000 de bônus">
       <button ref={closeRef} type="button" className="launch-promotion-close" onClick={onClose} aria-label="Fechar promoção"><X size={20}/></button>
-      <button type="button" className="launch-promotion-art" onClick={onDeposit} aria-label="Aproveitar promoção e depositar R$ 200">{!imageFailed ? <img src="/banners/zerobet-stories-cta.png?v=vamobet-20261017" alt="Vamobet: primeiro depósito de R$ 200 mais R$ 1.000 de bônus, total R$ 1.200" onError={() => setImageFailed(true)}/> : <div className="launch-promotion-fallback"><img src="/brand/vamobet-logo.png" alt="Vamobet"/><span>PRIMEIRO DEPÓSITO</span><h1>R$ 200 <small>vira</small> R$ 1.200</h1><p>R$ 200 de depósito + R$ 1.000 de bônus</p><strong>Aproveitar agora ›</strong></div>}</button>
+      <button type="button" className="launch-promotion-art" onClick={onDeposit} aria-label="Aproveitar promoção e depositar R$ 200">{!imageFailed ? <img src="/banners/vamobet-20261017-v2/zerobet-stories-cta.png" alt="Vamobet: primeiro depósito de R$ 200 mais R$ 1.000 de bônus, total R$ 1.200" onError={() => setImageFailed(true)}/> : <div className="launch-promotion-fallback"><img src="/brand/vamobet-logo.png" alt="Vamobet"/><span>PRIMEIRO DEPÓSITO</span><h1>R$ 200 <small>vira</small> R$ 1.200</h1><p>R$ 200 de depósito + R$ 1.000 de bônus</p><strong>Aproveitar agora ›</strong></div>}</button>
       <div className="launch-promotion-actions"><small>Oferta de bônus no primeiro depósito. Consulte as condições da promoção.</small></div>
     </div>
   </div>;
@@ -1417,12 +1407,12 @@ function FirstDepositPopup({ user, profile }: { user: User | null; profile: User
           }}
         >
           <img
-            src="/banners/popupdeposito001.png?v=vamobet-20261017"
+            src="/banners/vamobet-20261017-v2/popupdeposito001.png"
             alt="Promoção Especial de Depósito"
             className="first-deposit-popup-img"
             onError={(e) => {
-              if (e.currentTarget.src !== '/banners/popupdeposito001.png?v=vamobet-20261017') {
-                e.currentTarget.src = '/banners/popupdeposito001.png?v=vamobet-20261017';
+              if (e.currentTarget.src !== '/banners/vamobet-20261017-v2/popupdeposito001.png') {
+                e.currentTarget.src = '/banners/vamobet-20261017-v2/popupdeposito001.png';
               }
             }}
           />
@@ -1436,17 +1426,17 @@ function HomeBannerCarousel({ onGames }: { onGames: () => void }) {
   const slides = [
     {
       id: 'banner-borah-01',
-      desktop: '/banners/bannerborah1.png?v=vamobet-20261017',
-      mobile: '/banners/bannerborah1.png?v=vamobet-20261017',
-      localFallback: '/banners/bannerborah1.png?v=vamobet-20261017',
+      desktop: '/banners/vamobet-20261017-v2/bannerborah1.png',
+      mobile: '/banners/vamobet-20261017-v2/bannerborah1.png',
+      localFallback: '/banners/vamobet-20261017-v2/bannerborah1.png',
       alt: 'Vamobet — Destaque 1',
       action: onGames,
     },
     {
       id: 'banner-borah-02',
-      desktop: '/banners/bannerborah2.png?v=vamobet-20261017',
-      mobile: '/banners/bannerborah2.png?v=vamobet-20261017',
-      localFallback: '/banners/bannerborah2.png?v=vamobet-20261017',
+      desktop: '/banners/vamobet-20261017-v2/bannerborah2.png',
+      mobile: '/banners/vamobet-20261017-v2/bannerborah2.png',
+      localFallback: '/banners/vamobet-20261017-v2/bannerborah2.png',
       alt: 'Vamobet — Destaque 2',
       action: onGames,
     },
@@ -1619,21 +1609,21 @@ function PromosPage({ onWallet, onDeposit }: { onWallet: () => void; onDeposit?:
   const bonusBanners = [
     {
       id: 'bonus-100-500',
-      image: '/banners/ca100por500.png?v=vamobet-20261017',
+      image: '/banners/vamobet-20261017-v2/ca100por500.png',
       alt: 'Deposite R$ 100 e Receba R$ 500',
       depositAmount: 100,
       badge: '500% BÔNUS',
     },
     {
       id: 'bonus-200-1000',
-      image: '/banners/ca200por1000.png?v=vamobet-20261017',
+      image: '/banners/vamobet-20261017-v2/ca200por1000.png',
       alt: 'Deposite R$ 200 e Receba R$ 1.000',
       depositAmount: 200,
       badge: 'VIP 1.000',
     },
     {
       id: 'bonus-300-900',
-      image: '/banners/bonus300-900.png?v=vamobet-20261017',
+      image: '/banners/vamobet-20261017-v2/bonus300-900.png',
       alt: 'Bônus 300% até R$ 900',
       depositAmount: 300,
       badge: 'SUPER 900',
@@ -1905,11 +1895,11 @@ function DepositPage({ user, profile, onBalanceUpdate, initialAmount }: { user: 
 
     <section className="deposit-banner-shell">
       <img
-        src="/banners/bannerdep.png?v=vamobet-20261017"
+        src="/banners/vamobet-20261017-v2/bannerdep.png"
         alt="Área de Depósito — Vamobet"
         onError={(e) => {
-          if (e.currentTarget.src !== "/banners/bannerdep.png?v=vamobet-20261017") {
-            e.currentTarget.src = "/banners/bannerdep.png?v=vamobet-20261017";
+          if (e.currentTarget.src !== "/banners/vamobet-20261017-v2/bannerdep.png") {
+            e.currentTarget.src = "/banners/vamobet-20261017-v2/bannerdep.png";
           }
         }}
       />
@@ -1937,13 +1927,13 @@ function DepositPage({ user, profile, onBalanceUpdate, initialAmount }: { user: 
               setAmount(String(v));
               if (v === 100) {
                 setPromoOffer({
-                  image: '/banners/200por1000.png?v=vamobet-20261017',
+                  image: '/banners/vamobet-20261017-v2/200por1000.png',
                   alt: 'Deposite R$ 200 e Receba R$ 1.000',
                   targetAmount: '200',
                 });
               } else if (v === 25 || v === 50) {
                 setPromoOffer({
-                  image: '/banners/100por500.png?v=vamobet-20261017',
+                  image: '/banners/vamobet-20261017-v2/100por500.png',
                   alt: 'Deposite R$ 100 e Receba R$ 500',
                   targetAmount: '100',
                 });
@@ -1963,11 +1953,11 @@ function DepositPage({ user, profile, onBalanceUpdate, initialAmount }: { user: 
       {Number(amount) === 300 && (
         <div className="deposit-bonus-flash-banner">
           <img
-            src="/banners/bonus300-900.png?v=vamobet-20261017"
+            src="/banners/vamobet-20261017-v2/bonus300-900.png"
             alt="Bônus 300% até R$ 900"
             onError={(e) => {
-              if (e.currentTarget.src !== "/banners/bonus300-900.png?v=vamobet-20261017") {
-                e.currentTarget.src = "/banners/bonus300-900.png?v=vamobet-20261017";
+              if (e.currentTarget.src !== "/banners/vamobet-20261017-v2/bonus300-900.png") {
+                e.currentTarget.src = "/banners/vamobet-20261017-v2/bonus300-900.png";
               }
             }}
           />
@@ -1994,11 +1984,11 @@ function DepositPage({ user, profile, onBalanceUpdate, initialAmount }: { user: 
       {Number(payment.amount) === 300 && (
         <div className="deposit-bonus-flash-banner" style={{ marginBottom: "14px" }}>
           <img
-            src="/banners/bonus300-900.png?v=vamobet-20261017"
+            src="/banners/vamobet-20261017-v2/bonus300-900.png"
             alt="Bônus 300% até R$ 900"
             onError={(e) => {
-              if (e.currentTarget.src !== "/banners/deposito-300.png?v=vamobet-20261017") {
-                e.currentTarget.src = "/banners/deposito-300.png?v=vamobet-20261017";
+              if (e.currentTarget.src !== "/banners/vamobet-20261017-v2/deposito-300.png") {
+                e.currentTarget.src = "/banners/vamobet-20261017-v2/deposito-300.png";
               }
             }}
           />
@@ -2075,15 +2065,15 @@ function DepositPage({ user, profile, onBalanceUpdate, initialAmount }: { user: 
                 const current = target.src;
                 if (current.includes('200por1000') || current.includes('200por100')) {
                   if (!current.includes('ca200por1000')) {
-                    target.src = '/banners/ca200por1000.png?v=vamobet-20261017';
+                    target.src = '/banners/vamobet-20261017-v2/ca200por1000.png';
                   } else {
-                    target.src = '/banners/200por1000.png?v=vamobet-20261017';
+                    target.src = '/banners/vamobet-20261017-v2/200por1000.png';
                   }
                 } else if (current.includes('100por500')) {
                   if (!current.includes('ca100por500')) {
-                    target.src = '/banners/ca100por500.png?v=vamobet-20261017';
+                    target.src = '/banners/vamobet-20261017-v2/ca100por500.png';
                   } else {
-                    target.src = '/banners/100por500.png?v=vamobet-20261017';
+                    target.src = '/banners/vamobet-20261017-v2/100por500.png';
                   }
                 }
               }}
@@ -2401,7 +2391,7 @@ function HistoryPage({ user }: { user: User | null }) {
 
 function BonusesPlayerPage({onDeposit}:{onDeposit:()=>void}) {
   const [items,setItems]=useState<any[]>([]);
-  useEffect(()=>subscribeBonuses(setItems),[]);
+  useEffect(()=>subscribeBonuses(rows => setItems(rows.map(x => ({...x, image:brandedRecordImage(x,'image')})))),[]);
   return <div className="page"><div className="page-heading"><div><span className="eyebrow">BENEFÍCIOS</span><h2>Bônus</h2></div><Trophy/></div>
     <div className="bonus-player-grid">{items.map(x=>{const ratio=x.imageSizePreset==='1:1'?'1/1':x.imageSizePreset==='16:9'?'16/9':x.imageSizePreset==='9:16'?'9/16':'4/5';return <article className="bonus-player-card" key={x.id}>{x.image&&<div className="bonus-player-image" style={{aspectRatio:ratio}}><img src={x.image}/></div>}<span className="eyebrow">{x.type||'BONUS'}</span><h3>{x.title}</h3><strong>{x.percent?`${x.percent}%`:money(x.fixedAmount||0)}</strong><p>Depósito mínimo: {money(x.minDeposit||0)} • Máximo: {money(x.maxBonus||0)}</p>{x.rollover>0&&<small>Rollover: {x.rollover}x</small>}<button className="primary-button full" onClick={onDeposit}>{x.buttonText||'IR PARA DEPÓSITO'}</button></article>})}{!items.length&&<EmptyState title="Sem bônus ativos" text="Novas ofertas aparecerão aqui."/>}</div>
   </div>;
